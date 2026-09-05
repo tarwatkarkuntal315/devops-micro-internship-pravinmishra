@@ -14,11 +14,11 @@
 
 | | |
 |---|---|
-| **Name** | Pravin Mishra |
-| **LinkedIn** | [pravin-mishra-aws-trainer](https://www.linkedin.com/in/pravin-mishra-aws-trainer/) |
-| **Location** | Helsinki, Finland |
-| **Background** | Cloud, DevOps & AI Consultant |
-| **Goal** | Train 10,000+ DevOps professionals |
+| **Name** | Kuntal Tarwatkar |
+| **LinkedIn** | [kuntal-tarwatkar](https://www.linkedin.com/in/kuntal-tarwatkar-413653102/) |
+| **Location** | Nagpur, Maharashtra, India |
+| **Background** | Data & Analytics professional (6+ yrs) transitioning into DevOps, Cloud & Platform Engineering |
+| **Goal** | Become a production-grade DevOps / Cloud & Full-Stack AI Engineer — build, deploy, monitor & maintain real systems |
 
 ---
 
