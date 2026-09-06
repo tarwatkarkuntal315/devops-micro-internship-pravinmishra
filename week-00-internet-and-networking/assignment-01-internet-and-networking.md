@@ -34,7 +34,8 @@ Replace `task-1-chatgpt.png` with your actual screenshot file name.
 
 ## What I Learned (2–3 lines)
 
-Add your answer here...
+I learned that a networking protocol is a set of rules that devices follow to communicate with each other over a network connection. 
+I also understood that protocols such as HTTP define how information is requested and exchanged between a client and a server in a web browser.
 
 ---
 
@@ -59,7 +60,9 @@ Write a short explanation (**100–150 words**) that includes:
 
 ## Answer
 
-Add your answer here...
+When someone in the USA opens the EpicReads website hosted in Finland, their request travels across the world — through undersea cables and many routers — to reach the server. The data is broken into small pieces called packets, and these packets can travel through different routes across the Internet to reach the server. The server then sends back the response, which is broken into packets and sent back to the user's device. This is called packet switching.
+
+The server has an IP address, which helps the network identify where the website is located. TCP/IP provides the basic rules for sending and receiving this data between the user's device and the server. Finally, HTTP or HTTPS is used for communication between the browser and the website. HTTPS is more secure because it encrypts the data being exchanged between the user's device and the server, preventing unauthorized access.
 
 ---
 
@@ -102,18 +105,18 @@ Replace `task-3-diagram.png` with your actual diagram file name.
 
 ### Frontend
 
-* Add your answer here...
-* Add your answer here...
+* React (JavaScript library for building user interfaces)
+* HTML, CSS, and JavaScript
 
 ### Backend
 
-* Add your answer here...
-* Add your answer here...
+* Spring Boot (Java framework)
+* Node.js with Express
 
 ### Database
 
-* Add your answer here...
-* Add your answer here...
+* MySQL
+* PostgreSQL
 
 ---
 
@@ -142,7 +145,9 @@ In **50–100 words**, explain in your own words:
 
 ## Answer
 
-Add your answer here...
+DNS (Domain Name System) is like Internet's phonebook. It helps convert a domain name that is easy for people to remember, such as epicreads.com, into the IP address of the server where the website is hosted. 
+For EpicReads, an A record should be used because it connects the domain name epicreads.com to the IPv4 address 52.172.142.222. 
+The port number 3000 is separate from DNS and is handled by the application or web server as it is used to identify the specific service or application running on the server.
 
 ---
 
@@ -215,11 +220,7 @@ Add the following credit note at the end of your post:
 
 ## LinkedIn Post URL
 
-Paste your LinkedIn post URL here:
-
-```text
-Add your URL here...
-```
+Paste your LinkedIn post URL here: https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_devops-devopsengineering-cloudcomputing-activity-7502331460188598273-gD9D?utm_source=share&utm_medium=member_desktop&rcm=ACoAABoUk48BjJ6tcAJGJOvvM2Qscd7M-agXhXg
 
 ---
 
@@ -227,7 +228,46 @@ Add your URL here...
 
 Paste the full text of your LinkedIn post here:
 
-Add your post content here...
+🚀 𝗪𝗲𝗲𝗸 𝟬𝟬 𝗗𝗼𝗻𝗲 — 𝗗𝗲𝘃𝗢𝗽𝘀 𝗠𝗶𝗰𝗿𝗼 𝗜𝗻𝘁𝗲𝗿𝗻𝘀𝗵𝗶𝗽 | 𝗦𝗲𝗹𝗳-𝗣𝗮𝗰𝗲𝗱 𝗘𝗻𝗴𝗶𝗻𝗲𝗲𝗿 𝗧𝗿𝗮𝗰𝗸
+
+I've officially started the 𝗗𝗲𝘃𝗢𝗽𝘀 𝗠𝗶𝗰𝗿𝗼 𝗜𝗻𝘁𝗲𝗿𝗻𝘀𝗵𝗶𝗽 — Self-Paced Engineer Track, and Week 00 was all about strengthening the fundamentals of Internet, networking, application architecture, DNS, and development tools.
+Here's what I worked on this week:
+
+🤖 𝗖𝗵𝗮𝘁𝗚𝗣𝗧
+ I explored how to use ChatGPT as a learning assistant by creating structured prompts and using simple real-world examples to understand technical concepts. One of the concepts I worked on was 𝗻𝗲𝘁𝘄𝗼𝗿𝗸𝗶𝗻𝗴 𝗽𝗿𝗼𝘁𝗼𝗰𝗼𝗹𝘀 and how they help different devices communicate with each other.
+
+🌐 𝗜𝗻𝘁𝗲𝗿𝗻𝗲𝘁 & 𝗡𝗲𝘁𝘄𝗼𝗿𝗸𝗶𝗻𝗴
+ I worked through the fundamentals of how data moves across the Internet, including:
+ 🔹 𝗣𝗮𝗰𝗸𝗲𝘁 𝗦𝘄𝗶𝘁𝗰𝗵𝗶𝗻𝗴
+ 🔹 𝗜𝗣 𝗔𝗱𝗱𝗿𝗲𝘀𝘀𝗲𝘀
+ 🔹 𝗧𝗖𝗣/𝗜𝗣
+ 🔹 𝗛𝗧𝗧𝗣/𝗛𝗧𝗧𝗣𝗦
+ This helped me better understand what happens behind the scenes when we access a website.
+
+🏗️ 𝗔𝗽𝗽𝗹𝗶𝗰𝗮𝘁𝗶𝗼𝗻 𝗔𝗿𝗰𝗵𝗶𝘁𝗲𝗰𝘁𝘂𝗿𝗲
+ I explored 𝗧𝘄𝗼-𝗧𝗶𝗲𝗿 and 𝗧𝗵𝗿𝗲𝗲-𝗧𝗶𝗲𝗿 Application Architecture and understood how the different layers interact.
+ Two-Tier: Frontend → Database
+ Three-Tier: Frontend → Backend → Database
+ I also explored technologies commonly used across these layers, including React, Spring Boot, Node.js, PostgreSQL, and MySQL.
+
+🌍 𝗗𝗡𝗦
+ I learned how DNS translates a human-readable domain name into an IP address, and why an 𝗔 𝗿𝗲𝗰𝗼𝗿𝗱 is used to connect a domain to an IPv4 address. I also understood the difference between an IP address and a port, and how they serve different purposes.
+
+💻 𝗩𝗦 𝗖𝗼𝗱𝗲 𝗦𝗲𝘁𝘂𝗽
+ I set up my VS Code environment and worked with the integrated terminal to execute basic commands as part of the hands-on setup.
+Week 00 focused on fundamentals, but the bigger goal is to turn these concepts into 𝗽𝗿𝗮𝗰𝘁𝗶𝗰𝗮𝗹 𝗗𝗲𝘃𝗢𝗽𝘀 𝗲𝗻𝗴𝗶𝗻𝗲𝗲𝗿𝗶𝗻𝗴 𝘀𝗸𝗶𝗹𝗹𝘀 through consistent hands-on work.
+
+Looking forward to going deeper into Linux, Git, cloud, containers, CI/CD, Kubernetes, Infrastructure as Code, monitoring, and automation.
+
+𝗟𝗲𝗮𝗿𝗻𝗶𝗻𝗴 → 𝗕𝘂𝗶𝗹𝗱𝗶𝗻𝗴 → 𝗨𝗻𝗱𝗲𝗿𝘀𝘁𝗮𝗻𝗱𝗶𝗻𝗴 → 𝗜𝗺𝗽𝗿𝗼𝘃𝗶𝗻𝗴 🚀
+
+#DevOps #DevOpsEngineering #CloudComputing #LearningInPublic #AgenticAI
+
+P.S. This post is part of the DevOps Micro Internship (DMI) — Self-Paced Engineer Track — by Pravin Mishra. 
+My graded progress is public: https://dmi.pravinmishra.com/s/tarwatkarkuntal315.html 
+Start your DevOps journey: https://dmi.pravinmishra.com/?utm_source=student&utm_medium=ps-linkedin&utm_campaign=self-paced
+ 
+#DMIByPravinMishra
 
 ---
 
@@ -235,19 +275,19 @@ Add your post content here...
 
 ### What did you find easy?
 
-Add your answer here...
+I found the basic networking and DNS concepts easy to understand after going through the examples. Creating the application architecture diagrams was also easy once I understood the difference between two-tier and three-tier architecture.
 
 ---
 
 ### What was difficult?
 
-Add your answer here...
+The difficult part for me was understanding how all the networking concepts are connected. I understood IP address, DNS, ports, TCP/IP, and HTTP/HTTPS separately, but it took some time to understand how they work together when we open a website.
 
 ---
 
 ### What will you improve next week?
 
-Add your answer here...
+Next week, I want to focus more on practical work. I want to practice Linux commands, Git, networking, and other DevOps tools so that I can understand these concepts better by actually working with them.
 
 ---
 
