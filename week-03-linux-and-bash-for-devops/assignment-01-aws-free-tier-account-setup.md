@@ -61,7 +61,7 @@ Confirm that your AWS account setup is complete by navigating to the Account sec
 
 ### Screenshot 1 — AWS Account Page
 
-![AWS Account Page](screenshots/assignment-01/week-03-assignment-01-aws-account.png)
+![AWS Account Page](screenshots/assignment-01/week-03-assignment-01-task-03-account-details.png)
 
 ---
 
