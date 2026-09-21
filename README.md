@@ -74,7 +74,7 @@ This is not a course. It is an internship-style program — real deployments, re
 [![Week 01 – Mindset](./badges/week-01.svg)](./week-01-success-mindset/)
 
 <!-- Week 02 → Agentic AI with Claude Code -->
-<!-- [![Week 02 – Agentic AI](./badges/week-02.svg)](./week-02-agentic-ai/) -->
+[![Week 02 – Agentic AI](./badges/week-02.svg)](./week-02-agentic-ai/)
 
 <!-- Week 03 → Linux & Bash for DevOps -->
 <!-- [![Week 03 – Linux & Bash](./badges/week-03.svg)](./week-03-linux-and-bash-for-devops/) -->
@@ -132,7 +132,7 @@ This is not a course. It is an internship-style program — real deployments, re
 |------|-------|--------|------------|---------------|-----------|
 | 00 | Internet & Networking Basics | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_devops-devopsengineering-cloudcomputing-activity-7502331460188598273-gD9D) | — |
 | 01 | Success Mindset | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_dmi-devops-micro-internship-with-agentic-activity-7502386355029831680-TvO1) | [Medium](https://medium.com/@kuntaltarwatkar/my-2-0-version-building-a-stronger-engineering-career-ce52141f9d76) |
-| 02 | Agentic AI with Claude Code | ⬜ Not Started | ⏳ Pending | — | — |
+| 02 | Agentic AI with Claude Code | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/feed/update/urn:li:ugcPost:7507701682668109824/) | [Blog](https://medium.com/@kuntaltarwatkar/week-2-reflection-learning-agentic-ai-with-claude-code-e5e39abc9467) |
 | 03 | Linux & Bash for DevOps | ⬜ Not Started | ⏳ Pending | — | — |
 | 04 | Git & GitHub | ⬜ Not Started | ⏳ Pending | — | — |
 | 05 | DevOps Lifecycle & Agile | ⬜ Not Started | ⏳ Pending | — | — |
