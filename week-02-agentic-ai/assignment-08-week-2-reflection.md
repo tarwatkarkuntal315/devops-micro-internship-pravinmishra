@@ -46,7 +46,7 @@ You can publish your blog on:
 
 #### Screenshot 1 — Blog published and visible
 
-Add your screenshot here.
+![Blog published](screenshots/assignment-08/screenshot-01-blog-published.png)
 
 ---
 
@@ -54,7 +54,7 @@ Add your screenshot here.
 
 Blog Link:
 
-`Add your URL here`
+https://medium.com/@kuntaltarwatkar/week-2-reflection-learning-agentic-ai-with-claude-code-e5e39abc9467
 
 ---
 
@@ -92,7 +92,7 @@ Your post must include:
 
 #### Screenshot 2 — LinkedIn post published
 
-Add your screenshot here.
+![LinkedIn post](screenshots/assignment-08/screenshot-02-linkedin-post.png)
 
 ---
 
@@ -100,15 +100,31 @@ Add your screenshot here.
 
 LinkedIn Post Content (copy-paste here):
 
-```
-Paste your LinkedIn post content here
-```
+🚀 Week 2 of my DevOps Micro Internship with Agentic AI is complete!
+
+This week, I worked with Claude Code and learned how Agentic AI can be used in real DevOps workflows.
+
+I explored the Agentic Loop — Gather, Act, and Verify — and worked with concepts like CLAUDE.md, Skills, Subagents, MCP, Hooks, and Permissions.
+One of my biggest takeaways was that using AI in DevOps is not just about automation. The agent also needs the right context, permissions, and safety controls.
+
+I also faced a few real challenges during the week, including Git and file-handling issues and a situation that made me more careful about protecting sensitive information. These problems helped me understand why verification and good Git practices matter in DevOps.
+
+One habit I am taking forward: always check git status before committing, and make sure I am only pushing the files I actually intend to.
+
+Overall, Week 2 gave me a much better practical understanding of Agentic AI + DevOps, and I'm looking forward to the next stages of the internship.
+
+📖 Week 2 Reflection Blog: https://lnkd.in/gGs5CWMs
+#DMIByPravinMishra #AgenticAI #ClaudeCode #DevOps #LearningInPublic
+
+P.S. This post is part of the DevOps Micro Internship (DMI) — Self-Paced Engineer Track — by Pravin Mishra. 
+My graded progress is public: https://lnkd.in/dxQhw9_T · 
+Start your DevOps journey: https://lnkd.in/d-FWz7BG
 
 ---
 
 ### LinkedIn Post Link:
 
-`Add your URL here`
+https://www.linkedin.com/feed/update/urn:li:ugcPost:7507701682668109824/
 
 ---
 
@@ -124,15 +140,15 @@ Paste your LinkedIn post content here
 
 # Completion Checklist
 
-* [ ] Blog written with required structure
-* [ ] Blog includes at least 2–3 Week 2 topics
-* [ ] Blog is publicly accessible
-* [ ] LinkedIn post created
-* [ ] Required P.S. line included
-* [ ] LinkedIn post content copied in submission field
-* [ ] Blog link added
-* [ ] LinkedIn post link added
-* [ ] Screenshots added to GitHub repo
+* [x] Blog written with required structure
+* [x] Blog includes at least 2–3 Week 2 topics
+* [x] Blog is publicly accessible
+* [x] LinkedIn post created
+* [x] Required P.S. line included
+* [x] LinkedIn post content copied in submission field
+* [x] Blog link added
+* [x] LinkedIn post link added
+* [x] Screenshots added to GitHub repo
 
 ---
 
