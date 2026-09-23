@@ -20,13 +20,13 @@ Confirm that Git works and that you are inside the correct `CodeTrack` repositor
 
 #### Screenshot 1 — Output of `pwd` showing you're inside `CodeTrack`
 
-Add your screenshot here.
+![Screenshot 1 - pwd](screenshots/assignment-02/week-04-assignment-02-screenshot-01-pwd.png)
 
 ---
 
 #### Screenshot 2 — Output of `git status` showing no "not a git repository" error
 
-Add your screenshot here.
+![Screenshot 2 - Git status](screenshots/assignment-02/week-04-assignment-02-screenshot-02-git-status.png)
 
 ---
 
@@ -40,7 +40,7 @@ Create the two starter UI files inside `CodeTrack`.
 
 #### Screenshot 3 — Output of `ls` showing `index.html` and `style.css`
 
-Add your screenshot here.
+![Screenshot 3 - Files created](screenshots/assignment-02/week-04-assignment-02-screenshot-03-files-created.png)
 
 ---
 
@@ -54,7 +54,7 @@ Copy the provided starter HTML and CSS content into your local `index.html` and 
 
 #### Screenshot 4 — Your editor showing the contents of `index.html` and `style.css`
 
-Add your screenshot here.
+![Screenshot 4 - Starter content](screenshots/assignment-02/week-04-assignment-02-screenshot-04-starter-content.png)
 
 ---
 
@@ -68,13 +68,13 @@ Confirm both files show as untracked, then stage them individually with `git add
 
 #### Screenshot 5 — Output of `git status` showing both files as untracked
 
-Add your screenshot here.
+![Screenshot 5 - Untracked files](screenshots/assignment-02/week-04-assignment-02-screenshot-05-untracked.png)
 
 ---
 
 #### Screenshot 6 — Output of `git status` showing both files staged under "Changes to be committed"
 
-Add your screenshot here.
+![Screenshot 6 - Staged files](screenshots/assignment-02/week-04-assignment-02-screenshot-06-staged.png)
 
 ---
 
@@ -88,13 +88,13 @@ Commit the staged starter files using the message `Initial UI scaffold: add inde
 
 #### Screenshot 7 — Output of `git commit`
 
-Add your screenshot here.
+![Screenshot 7 - First commit](screenshots/assignment-02/week-04-assignment-02-screenshot-07-first-commit.png)
 
 ---
 
 #### Screenshot 8 — Output of `git log --oneline` showing the first commit
 
-Add your screenshot here.
+![Screenshot 8 - First commit log](screenshots/assignment-02/week-04-assignment-02-screenshot-08-first-log.png)
 
 ---
 
@@ -108,25 +108,25 @@ Follow the instruction comment inside `index.html` to update the Student Name an
 
 #### Screenshot 9 — Browser showing the updated page with your Student Name and Group Name visible
 
-Add your screenshot here.
+![Screenshot 9 - Updated browser](screenshots/assignment-02/week-04-assignment-02-screenshot-09-updated-browser.png)
 
 ---
 
 #### Screenshot 10 — Output of `git status` showing `index.html` as modified
 
-Add your screenshot here.
+![Screenshot 10 - Modified status](screenshots/assignment-02/week-04-assignment-02-screenshot-10-modified-status.png)
 
 ---
 
 #### Screenshot 11 — Output of `git commit`
 
-Add your screenshot here.
+![Screenshot 11 - Second commit](screenshots/assignment-02/week-04-assignment-02-screenshot-11-second-commit.png)
 
 ---
 
 #### Screenshot 12 — Output of `git log --oneline` showing two commits
 
-Add your screenshot here.
+![Screenshot 12 - Two commits](screenshots/assignment-02/week-04-assignment-02-screenshot-12-two-commits.png)
 
 ---
 
@@ -140,19 +140,23 @@ Install and start Nginx on your EC2 instance, then copy `index.html` and `style.
 
 #### Screenshot 13 — Output of `systemctl status nginx --no-pager` showing Nginx `active (running)`
 
-Add your screenshot here.
+![Screenshot 13 - Nginx status](screenshots/assignment-02/week-04-assignment-02-screenshot-13-nginx-status.png)
 
 ---
 
 #### Screenshot 14 — Output of `curl -I http://localhost` showing `HTTP/1.1 200 OK`
 
-Add your screenshot here.
+![Screenshot 14 - Curl 200](screenshots/assignment-02/week-04-assignment-02-screenshot-14-curl-200.png)
 
 ---
 
 #### Screenshot 15 — Browser showing the CodeTrack site loaded at `http://<EC2_PUBLIC_IP>`, with your Full Name and Group Name visible
 
-Add your screenshot here.
+![Screenshot 15 - Deployed CodeTrack](screenshots/assignment-02/week-04-assignment-02-screenshot-15-deployed-site.png)
+
+### Live CodeTrack Application
+
+http://18.232.152.18
 
 ---
 
@@ -164,13 +168,13 @@ Add your screenshot here.
 
 Paste your LinkedIn post URL here:
 
-`Add your URL here`
+https://www.linkedin.com/feed/update/urn:li:activity:7508539558695940096/
 
 ---
 
 #### Screenshot — LinkedIn post showing the deployed CodeTrack application
 
-Add your screenshot here.
+![LinkedIn Post](screenshots/assignment-02/week-04-assignment-02-screenshot-16-linkedin.png)
 
 ---
 
