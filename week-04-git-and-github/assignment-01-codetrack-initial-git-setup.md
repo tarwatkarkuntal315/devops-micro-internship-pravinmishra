@@ -20,13 +20,13 @@ Create a `CodeTrack` project folder and initialize it as a Git repository.
 
 #### Screenshot 1 — Output of `git init` inside `CodeTrack` showing "Initialized empty Git repository"
 
-Add your screenshot here.
+![Screenshot 1 - Git init](screenshots/assignment-01/week-04-assignment-01-screenshot-01-git-init.png)
 
 ---
 
 #### Screenshot 2 — Output of `ls -a` showing the `.git` folder
 
-Add your screenshot here.
+![Screenshot 2 - Git folder](screenshots/assignment-01/week-04-assignment-01-screenshot-02-git-folder.png)
 
 ---
 
@@ -34,7 +34,8 @@ Add your screenshot here.
 
 **1. What is the `.git` folder, and why does it matter?**
 
-Add your answer here.
+The `.git` folder stores the Git repository information, including its history and configuration. It is created when we run `git init`. It matters because Git uses this folder to track changes and manage commits, branches, and other version control operations.
+
 
 ---
 
@@ -48,7 +49,14 @@ Set your Git username and email for the `CodeTrack` repository only, using `git 
 
 #### Screenshot 3 — Output of `git config --local --list` showing your `user.name` and `user.email`
 
-Add your screenshot here.
+![Screenshot 3 - Local Git configuration](screenshots/assignment-01/week-04-assignment-01-screenshot-03-local-config.png)
+
+The local Git identity configured for the CodeTrack repository is:
+
+- **user.name:** Kuntal Tarwatkar
+- **user.email:** tarwatkarkuntal315@gmail.com
+
+---
 
 ---
 
@@ -62,7 +70,25 @@ Set a global Git username and email for this machine using `git config --global`
 
 #### Screenshot 4 — Output of `git config --global --list` showing your `user.name` and `user.email`
 
-Add your screenshot here.
+![Screenshot 4 - Global Git configuration](screenshots/assignment-01/week-04-assignment-01-screenshot-04-global-config.png)
+
+The global Git identity configured on the machine is:
+
+- **user.name:** Kuntal Tarwatkar
+- **user.email:** tarwatkarkuntal315@gmail.com
+
+The local configuration inside CodeTrack can override the global configuration when both are present.
+
+
+---
+
+# Task 4 — Share Your Git Setup Progress
+
+The Git setup progress was shared on WhatsApp Status using the DMI-generated progress message and link.
+
+### Screenshot 5 — Published WhatsApp Status
+
+![Screenshot 5 - WhatsApp Status](screenshots/assignment-01/week-04-assignment-01-screenshot-05-whatsapp-status.png)
 
 ---
 
@@ -76,11 +102,11 @@ Add your screenshot here.
 
 # Completion Checklist
 
-- [ ] `CodeTrack` folder created and initialized as a Git repository (Screenshots 1–2)
-- [ ] Explanation of the `.git` folder written in your own words
-- [ ] Local `user.name` and `user.email` configured and verified (Screenshot 3)
-- [ ] Global `user.name` and `user.email` configured and verified (Screenshot 4)
-- [ ] No sensitive data exposed
+- [x] `CodeTrack` folder created and initialized as a Git repository (Screenshots 1–2)
+- [x] Explanation of the `.git` folder written in your own words
+- [x] Local `user.name` and `user.email` configured and verified (Screenshot 3)
+- [x] Global `user.name` and `user.email` configured and verified (Screenshot 4)
+- [x] No sensitive data exposed
 
 ---
 
