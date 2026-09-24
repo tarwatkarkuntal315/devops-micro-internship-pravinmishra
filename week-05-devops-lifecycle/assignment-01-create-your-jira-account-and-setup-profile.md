@@ -20,7 +20,7 @@ Create or access your Jira Cloud account and reach the Jira Software workspace s
 
 #### Screenshot 1 — Jira welcome page, dashboard, or main workspace after successful login, with your name or avatar visible
 
-Add your screenshot here.
+![Screenshot 1](screenshots/assignment-01/week-05-assignment-01-screenshot-01-jira-workspace.png)
 
 ---
 
@@ -34,7 +34,7 @@ Confirm your email address if Atlassian requests verification.
 
 #### Screenshot 2 (if applicable) — Confirmation screen after email verification, or the inbox showing the Atlassian verification email subject
 
-Add your screenshot here.
+> I signed up using Google, and Atlassian did not require separate email verification.
 
 ---
 
@@ -58,8 +58,14 @@ Update your Jira profile with your full name, a job title or role (e.g. "Aspirin
 
 #### Screenshot 3 — Updated profile page showing your full name, role/title, and bio
 
-Add your screenshot here.
+![Screenshot 3](screenshots/assignment-01/week-05-assignment-01-screenshot-03-jira-professional-profile.png)
 
+My Jira profile was updated with:
+
+- Full Name: Kuntal Tarwatkar
+- Role/Title: Aspiring DevOps Engineer • Data Analytics
+- Bio: Data & Analytics Professional | DevOps & Cloud Learner | Python, Git & GitHub | Agile Project Management
+  
 ---
 
 # Task 4 — Explore the Jira Dashboard and Projects
@@ -72,13 +78,31 @@ Locate the project list and open a project's Board or Backlog, and view Project 
 
 #### Screenshot 4 — "View all projects" page showing at least one project
 
-Add your screenshot here.
+![Screenshot 4](screenshots/assignment-01/week-05-assignment-01-screenshot-04-view-all-projects.png)
+
+I opened the project list and confirmed that the available spaces included `My Project Management Team`.
 
 ---
 
 #### Screenshot 5 — Opened project showing either the Board or Backlog screen
 
-Add your screenshot here.
+![Screenshot 5](screenshots/assignment-01/week-05-assignment-01-screenshot-05-project-board.png)
+
+I opened `My Project Management Team` and explored the Kanban Board. The Board showed the work columns including Idea, To Do, In Progress, In Review, and Done.
+
+I also opened the Space settings and viewed the available settings without making any changes.
+
+No Jira issues were created, edited, moved, or deleted during this assignment.
+
+---
+
+#### Screenshot 6 — Published WhatsApp Status showing Jira setup message and generated DMI leaderboard progress link
+
+![Screenshot 6](screenshots/assignment-01/week-05-assignment-01-screenshot-06-whatsapp-status.png)
+
+I published a WhatsApp Status describing my Jira setup and included the generated DMI leaderboard progress message and link.
+
+The DMI progress message showed that I had completed 4/14 sections of the DevOps Micro Internship at the time of sharing.
 
 ---
 
@@ -94,13 +118,13 @@ Add your screenshot here.
 
 # Completion Checklist
 
-- [ ] Task 1: Jira Software Cloud account created or existing account accessed (Screenshot 1)
-- [ ] Task 2: Email verification completed, or a Google sign-in note included (Screenshot 2 or Notes)
-- [ ] Task 3: Professional profile updated with full name, role/title, and bio (Screenshot 3)
-- [ ] Task 4: Projects page, Board or Backlog, and Project settings explored without making changes (Screenshots 4 & 5)
-- [ ] No Jira issues created
-- [ ] Full Name visible in required screenshots
-- [ ] No sensitive data exposed
+- [x] Task 1: Jira Software Cloud account created or existing account accessed (Screenshot 1)
+- [x] Task 2: Email verification completed, or a Google sign-in note included (Screenshot 2 or Notes)
+- [x] Task 3: Professional profile updated with full name, role/title, and bio (Screenshot 3)
+- [x] Task 4: Projects page, Board or Backlog, and Project settings explored without making changes (Screenshots 4 & 5)
+- [x] No Jira issues created
+- [x] Full Name visible in required screenshots
+- [x] No sensitive data exposed
 
 ---
 
