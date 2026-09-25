@@ -130,7 +130,7 @@ This is not a course. It is an internship-style program — real deployments, re
 
 | Week | Topic | Status | Assignment | LinkedIn Post | Blog Post |
 |------|-------|--------|------------|---------------|-----------|
-| 00 | Internet & Networking Basics | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_devops-devopsengineering-cloudcomputing-activity-7502331460188598273-gD9D) | — |
+| 00 | Internet & Networking Basics | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_devops-devopsengineering-cloudcomputing-activity-7502331460188598273-gD9D) | [Medium](https://medium.com/@kuntaltarwatkar/week-00-building-the-foundation-internet-networking-developer-tools-724b8e8dcbd0?sharedUserId=kuntaltarwatkar) |
 | 01 | Success Mindset | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_dmi-devops-micro-internship-with-agentic-activity-7502386355029831680-TvO1) | [Medium](https://medium.com/@kuntaltarwatkar/my-2-0-version-building-a-stronger-engineering-career-ce52141f9d76) |
 | 02 | Agentic AI with Claude Code | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/feed/update/urn:li:ugcPost:7507701682668109824/) | [Blog](https://medium.com/@kuntaltarwatkar/week-2-reflection-learning-agentic-ai-with-claude-code-e5e39abc9467) |
 | 03 | Linux & Bash for DevOps | ⬜ Not Started | ⏳ Pending | — | — |
