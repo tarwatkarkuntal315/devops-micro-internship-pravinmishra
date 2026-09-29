@@ -20,7 +20,7 @@ Clone `https://github.com/pravinmishraaws/my-react-app.git` and create a `.docke
 
 #### Screenshot 1 — Contents of the `.dockerignore` file
 
-Add your screenshot here.
+![Screenshot 1 — .dockerignore](screenshots/assignment-02/week-11-assignment-02-screenshot-01-dockerignore.png)
 
 ---
 
@@ -34,13 +34,13 @@ Create `Dockerfile.single`, build `react-single`, and run it on port 3000.
 
 #### Screenshot 2 — Contents of `Dockerfile.single`
 
-Add your screenshot here.
+![Screenshot 2 — Single-stage Dockerfile](screenshots/assignment-02/week-11-assignment-02-screenshot-02-single-stage-dockerfile.png)
 
 ---
 
 #### Screenshot 3 — Browser displaying the application running from the single-stage container
 
-Add your screenshot here.
+![Screenshot 3 — Single-stage React application](screenshots/assignment-02/week-11-assignment-02-screenshot-03-single-stage-app.png)
 
 ---
 
@@ -54,13 +54,13 @@ Create a multi-stage Dockerfile with separate build and Nginx runtime stages, bu
 
 #### Screenshot 4 — Contents of the multi-stage Dockerfile
 
-Add your screenshot here.
+![Screenshot 4 — Multi-stage Dockerfile](screenshots/assignment-02/week-11-assignment-02-screenshot-04-multi-stage-dockerfile.png)
 
 ---
 
 #### Screenshot 5 — Browser displaying the application running from the multi-stage container
 
-Add your screenshot here.
+![Screenshot 5 — Multi-stage React application](screenshots/assignment-02/week-11-assignment-02-screenshot-05-multi-stage-app.png)
 
 ---
 
@@ -74,7 +74,21 @@ Compare the single-stage and multi-stage image sizes and calculate the percentag
 
 #### Screenshot 6 — Docker image list showing both image sizes
 
-Add your screenshot here.
+![Screenshot 6 — Docker image size comparison](screenshots/assignment-02/week-11-assignment-02-screenshot-06-image-size-comparison.png)
+
+### Image Size Comparison
+
+| Image | Disk Usage |
+|---|---:|
+| `react-single:latest` | 842 MB |
+| `react-multistage:latest` | 95 MB |
+
+### Percentage Reduction
+
+```text
+((842 MB - 95 MB) / 842 MB) × 100
+= 88.72% 
+```
 
 ---
 
@@ -88,15 +102,13 @@ Write a 5–8 line analysis covering the percentage reduction, security benefits
 
 #### Screenshot 7 — Analysis included in your submission document
 
-Add your screenshot here.
+![Screenshot 7 — Task 5 Analysis](screenshots/assignment-02/week-11-assignment-02-screenshot-07-analysis.png)
 
 ---
 
 ### Notes
 
-Write your analysis here.
-
-Write your answer here.
+The single-stage Docker image `react-single:latest` has a disk usage of **842 MB**, while the optimized multi-stage image `react-multistage:latest` uses only **95 MB**. This represents an **88.72% reduction** in image size. The multi-stage build keeps Node.js, source files, and development dependencies in the builder stage and copies only the production `build/` output into the Nginx runtime image. This reduces the final image's attack surface and removes unnecessary build-time components from production. The smaller image also reduces image transfer and deployment time. A Docker build-caching optimization was used by copying `package*.json` before the application source and installing dependencies before `COPY . .`, allowing the dependency layer to be reused when source files change.
 
 ---
 
@@ -122,13 +134,13 @@ Create a LinkedIn post describing what you built, what a multi-stage Docker buil
 
 Paste your LinkedIn post URL here:
 
-`Add your URL here`
+https://www.linkedin.com/feed/update/urn:li:activity:7510709467169230857/
 
 ---
 
 #### Screenshot — Published LinkedIn post
 
-Add your screenshot here.
+![LinkedIn Post Screenshot](screenshots/assignment-02/week-11-assignment-02-linkedin-screenshot-01.png)
 
 ---
 
@@ -142,13 +154,13 @@ Add your screenshot here.
 
 # Completion Checklist
 
-- [ ] Task 1: `.dockerignore` created (Screenshot 1)
-- [ ] Task 2: Single-stage image built and verified (Screenshots 2–3)
-- [ ] Task 3: Multi-stage image built and verified (Screenshots 4–5)
-- [ ] Task 4: Image sizes compared (Screenshot 6)
-- [ ] Task 5: Analysis written (Screenshot 7 & Notes)
-- [ ] Task 6: Optional production optimizations explored
-- [ ] No sensitive information exposed
+- [x] Task 1: `.dockerignore` created (Screenshot 1)
+- [x] Task 2: Single-stage image built and verified (Screenshots 2–3)
+- [x] Task 3: Multi-stage image built and verified (Screenshots 4–5)
+- [x] Task 4: Image sizes compared (Screenshot 6)
+- [x] Task 5: Analysis written (Screenshot 7 & Notes)
+- [x] Task 6: Optional production optimizations explored
+- [x] No sensitive information exposed
 
 ---
 

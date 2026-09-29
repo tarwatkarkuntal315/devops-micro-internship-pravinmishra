@@ -1,3 +1,6 @@
 .DS_Store
 CLAUDE.md
 .claude/settings.local.json
+
+# Local React project used for Docker assignment
+/week-11-docker/my-react-app/
