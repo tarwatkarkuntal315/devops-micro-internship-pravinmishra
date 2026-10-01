@@ -20,49 +20,140 @@ Create a Docker Hub repository (`my-react-app`), log in from the CLI, tag and pu
 
 #### Screenshot 1 — Docker Hub repository (`my-react-app`)
 
-Add your screenshot here.
+![Screenshot 1 — Docker Hub repository](screenshots/assignment-05/week-11-assignment-05-screenshot-01-dockerhub-repository.png)
 
 ---
 
 #### Screenshot 2 — Successful `docker login`
 
-Add your screenshot here.
+```powershell
+echo "Full Name: Kuntal Tarwatkar"
+docker login --username kuntal210790
+```
+
+Result:
+
+```text
+Login Succeeded
+```
+
+![Screenshot 2 — Docker login](screenshots/assignment-05/week-11-assignment-05-screenshot-02-docker-login.png)
 
 ---
 
 #### Screenshot 3 — Successful `docker tag`
 
-Add your screenshot here.
+The existing React image was tagged for the Docker Hub repository:
+
+```powershell
+docker tag react-multistage:latest kuntal210790/my-react-app:latest
+echo "Full Name: Kuntal Tarwatkar"
+docker image ls kuntal210790/my-react-app
+```
+
+The resulting image tag was:
+
+```text
+kuntal210790/my-react-app:latest
+```
+
+Image ID:
+
+```text
+d4c03e401960
+```
+
+![Screenshot 3 — Docker image tag](screenshots/assignment-05/week-11-assignment-05-screenshot-03-docker-image-tag.png)
 
 ---
 
 #### Screenshot 4 — Successful `docker push`
 
-Add your screenshot here.
+The tagged image was pushed to Docker Hub:
+
+```powershell
+docker push kuntal210790/my-react-app:latest
+```
+
+The push completed successfully.
+
+![Screenshot 4 — Docker push](screenshots/assignment-05/week-11-assignment-05-screenshot-04-docker-push.png)
 
 ---
 
 #### Screenshot 5 — Docker Hub repository showing the uploaded image
 
-Add your screenshot here.
+The Docker Hub repository was refreshed and verified to contain the uploaded `latest` image tag.
+
+![Screenshot 5 — Docker Hub latest tag](screenshots/assignment-05/week-11-assignment-05-screenshot-05-dockerhub-latest-tag.png)
 
 ---
 
 #### Screenshot 6 — Successful `docker pull`
 
-Add your screenshot here.
+The targeted local image tags were removed:
+
+```powershell
+docker rm -f react-container react-prod 2>$null
+docker image rm react-multistage:latest kuntal210790/my-react-app:latest
+```
+
+The image was then downloaded again from Docker Hub:
+
+```powershell
+echo "Full Name: Kuntal Tarwatkar"
+docker pull kuntal210790/my-react-app:latest
+docker image ls kuntal210790/my-react-app
+```
+
+The image was successfully pulled and appeared locally as:
+
+```text
+kuntal210790/my-react-app:latest
+```
+
+![Screenshot 6 — Docker pull](screenshots/assignment-05/week-11-assignment-05-screenshot-06-docker-pull.png)
 
 ---
 
 #### Screenshot 7 — Output of `docker ps`
 
-Add your screenshot here.
+The previous Assignment 04 containers were removed from the Azure VM. The Docker Hub image was then pulled and run on the VM.
+
+```bash
+docker run -d \
+  --name react-container \
+  -p 80:80 \
+  kuntal210790/my-react-app:latest
+
+echo "Full Name: Kuntal Tarwatkar"
+docker ps
+```
+
+The running container showed:
+
+```text
+Image: kuntal210790/my-react-app:latest
+Status: Up
+Port: 0.0.0.0:80->80/tcp
+Name: react-container
+```
+
+![Screenshot 7 — Docker container running on Azure VM](screenshots/assignment-05/week-11-assignment-05-screenshot-07-docker-container-running-vm.png)
 
 ---
 
 #### Screenshot 8 — Browser displaying the running React application
 
-Add your screenshot here.
+The published Docker image was accessed through the Azure VM public IP:
+
+```text
+http://4.224.18.235
+```
+
+The React application loaded successfully.
+
+![Screenshot 8 — React application](screenshots/assignment-05/week-11-assignment-05-screenshot-08-react-application.png)
 
 ---
 
@@ -78,13 +169,13 @@ Create a LinkedIn post covering the assignment title, the Docker Hub repository 
 
 Paste your LinkedIn post URL here:
 
-`Add your URL here`
+https://www.linkedin.com/feed/update/urn:li:activity:7511444244184825857/
 
 ---
 
 #### Screenshot — Published LinkedIn post
 
-Add your screenshot here.
+![Published LinkedIn Post](screenshots/assignment-05/week-11-assignment-05-linkedin-post.png)
 
 ---
 
@@ -99,11 +190,11 @@ Add your screenshot here.
 
 # Completion Checklist
 
-- [ ] Docker Hub account and repository created
-- [ ] Docker image tagged and pushed successfully (Screenshots 1–5)
-- [ ] Docker image pulled and container run successfully (Screenshots 6–7)
-- [ ] React application accessible in the browser (Screenshot 8)
-- [ ] No sensitive information exposed
+- [x] Docker Hub account and repository created
+- [x] Docker image tagged and pushed successfully (Screenshots 1–5)
+- [x] Docker image pulled and container run successfully (Screenshots 6–7)
+- [x] React application accessible in the browser (Screenshot 8)
+- [x] No sensitive information exposed
 
 ---
 
