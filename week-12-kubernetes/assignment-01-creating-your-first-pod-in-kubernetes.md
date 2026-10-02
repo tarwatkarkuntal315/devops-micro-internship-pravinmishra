@@ -20,7 +20,7 @@ Create the `~/k8s-labs/pods` working directory for all Pod-related files.
 
 #### Screenshot 1 — Terminal showing the `~/k8s-labs/pods` working directory
 
-Add your screenshot here.
+![Lab Directory](screenshots/week-12-assignment-01-screenshot-01-lab-directory.png)
 
 ---
 
@@ -34,7 +34,7 @@ Create `nginx-pod` with `kubectl run --image=nginx`, verify it reaches Running, 
 
 #### Screenshot 2 — Terminal showing `nginx-pod` in Running state before deletion
 
-Add your screenshot here.
+![Imperative Pod](screenshots/week-12-assignment-01-screenshot-02-imperative-pod.png)
 
 ---
 
@@ -48,7 +48,7 @@ Write `nginx-pod.yaml` (apiVersion `v1`, kind `Pod`, label `app: nginx`, contain
 
 #### Screenshot 3 — `nginx-pod.yaml` and terminal output showing `nginx-pod` in Running state
 
-Add your screenshot here.
+![Declarative Pod](screenshots/week-12-assignment-01-screenshot-03-declarative-pod.png)
 
 ---
 
@@ -62,7 +62,7 @@ Run `kubectl describe`, `kubectl logs`, and `kubectl exec -it ... -- /bin/bash` 
 
 #### Screenshot 4 — Terminal showing `kubectl describe`, `kubectl logs`, or the `/usr/share/nginx/html` directory
 
-Add your screenshot here.
+![Pod Inspection](screenshots/week-12-assignment-01-screenshot-04-pod-inspection.png)
 
 ---
 
@@ -71,15 +71,37 @@ Add your screenshot here.
 - Add all required screenshots in your submission
 - Include the completed `nginx-pod.yaml` manifest
 
+## Completed Kubernetes Manifest
+
+The declarative Pod was created using the following `nginx-pod.yaml` manifest:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+```
+### Manifest File
+
+[`nginx-pod.yaml`](nginx-pod.yaml)
+
 ---
 
 # Completion Checklist
 
-- [ ] Task 1: Lab directory created (Screenshot 1)
-- [ ] Task 2: Pod created imperatively, verified, and deleted (Screenshot 2)
-- [ ] Task 3: Pod created declaratively and verified Running (Screenshot 3)
-- [ ] Task 4: Pod inspected via describe/logs/exec (Screenshot 4)
-- [ ] Understood the difference between imperative and declarative methods
+- [x] Task 1: Lab directory created (Screenshot 1)
+- [x] Task 2: Pod created imperatively, verified, and deleted (Screenshot 2)
+- [x] Task 3: Pod created declaratively and verified Running (Screenshot 3)
+- [x] Task 4: Pod inspected via describe/logs/exec (Screenshot 4)
+- [x] Understood the difference between imperative and declarative methods
 
 ---
 
