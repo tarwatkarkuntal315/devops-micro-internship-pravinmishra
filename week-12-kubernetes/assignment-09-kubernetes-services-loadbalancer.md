@@ -20,7 +20,7 @@ Create resource group `rg-aks-lb-lab` and a one-node AKS cluster `aks-lb-lab` (`
 
 #### Screenshot 1 — AKS creation result and Ready node output
 
-Add your screenshot here.
+![Screenshot 1](screenshots/assignment-09/week-12-assignment-09-screenshot-01.png)
 
 ---
 
@@ -34,7 +34,7 @@ Create two healthy, probed NGINX Pods for the public Service.
 
 #### Screenshot 2 — Successful rollout and two Ready Pods
 
-Add your screenshot here.
+![Screenshot 2](screenshots/assignment-09/week-12-assignment-09-screenshot-02.png)
 
 ---
 
@@ -48,7 +48,7 @@ Create `nginx-svc-lb` (type `LoadBalancer`, port 80), wait for `EXTERNAL-IP`, an
 
 #### Screenshot 3 — Service with public `EXTERNAL-IP` and successful `curl` output
 
-Add your screenshot here.
+![Screenshot 3](screenshots/assignment-09/week-12-assignment-09-screenshot-03.png)
 
 ---
 
@@ -62,7 +62,7 @@ Apply a broken readiness patch, confirm the Pod leaves the endpoint set and publ
 
 #### Screenshot 4 — Endpoint changes and public `curl` behavior before and after recovery
 
-Add your screenshot here.
+![Screenshot 4](screenshots/assignment-09/week-12-assignment-09-screenshot-04.png)
 
 ---
 
@@ -76,7 +76,7 @@ Scale to four replicas and confirm the endpoint set grows while the public IP st
 
 #### Screenshot 5 — Four replicas/endpoints behind the unchanged public endpoint
 
-Add your screenshot here.
+![Screenshot 5](screenshots/assignment-09/week-12-assignment-09-screenshot-05.png)
 
 ---
 
@@ -90,7 +90,7 @@ Resolve any pending endpoint or unhealthy backend issues, then delete the Kubern
 
 #### Screenshot 6 — Clean final verification or resource deletion command output
 
-Add your screenshot here.
+![Screenshot 6](screenshots/assignment-09/week-12-assignment-09-screenshot-06.png)
 
 ---
 
@@ -98,7 +98,17 @@ Add your screenshot here.
 
 Write a short note describing what the lab demonstrated.
 
-Write your answer here.
+This lab demonstrated how a Kubernetes `LoadBalancer` Service exposes a workload through a stable public endpoint.
+
+The lab also demonstrated that:
+
+1. Kubernetes readiness probes control whether Pods are included in Service endpoints.
+2. A failing readiness probe removes the affected Pod from the endpoint set while the Pod can remain in a `Running` state.
+3. Restoring the readiness probe causes the healthy Pod to become Ready and return to the Service endpoint set.
+4. Scaling the Deployment from two to four replicas expands the endpoint set without changing the Service's public IP.
+5. Azure AKS provisioning can depend on subscription-specific region, SKU, and quota availability.
+
+Due to Azure subscription restrictions, the lab environment differed from the original requested `westeurope` / `Standard_B2s` configuration. Central India with `Standard_D4s_v4` was used to complete the same Kubernetes LoadBalancer objectives.
 
 ---
 
@@ -111,13 +121,13 @@ Write your answer here.
 
 # Completion Checklist
 
-- [ ] Task 1: AKS cluster provisioned and connected (Screenshot 1)
-- [ ] Task 2: Probed NGINX Deployment applied (Screenshot 2)
-- [ ] Task 3: LoadBalancer Service created and tested (Screenshot 3)
-- [ ] Task 4: Readiness impact on public traffic proven (Screenshot 4)
-- [ ] Task 5: Scaled behind the stable endpoint (Screenshot 5)
-- [ ] Task 6: Verified / cleaned up Azure resources (Screenshot 6)
-- [ ] Reflection notes written (Notes)
+- [x] Task 1: AKS cluster provisioned and connected (Screenshot 1)
+- [x] Task 2: Probed NGINX Deployment applied (Screenshot 2)
+- [x] Task 3: LoadBalancer Service created and tested (Screenshot 3)
+- [x] Task 4: Readiness impact on public traffic proven (Screenshot 4)
+- [x] Task 5: Scaled behind the stable endpoint (Screenshot 5)
+- [x] Task 6: Verified / cleaned up Azure resources (Screenshot 6)
+- [x] Reflection notes written (Notes)
 
 ---
 
