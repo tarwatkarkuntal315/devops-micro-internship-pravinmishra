@@ -24,6 +24,14 @@ spec:
           image: nginx:1.21.1
           ports:
             - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /does-not-exist
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 3
           resources:
             requests:
               cpu: "100m"

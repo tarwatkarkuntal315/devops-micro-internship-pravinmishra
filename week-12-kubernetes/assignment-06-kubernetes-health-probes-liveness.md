@@ -20,7 +20,7 @@ Deploy two NGINX Pods without probes (`00-nginx-deploy-baseline.yaml`).
 
 #### Screenshot 1 — Baseline Deployment and two running Pods
 
-Add your screenshot here.
+![Screenshot 1 — Baseline Deployment and two running Pods](screenshots/assignment-06/week-12-assignment-06-screenshot-01-baseline.png)
 
 ---
 
@@ -34,7 +34,7 @@ Add an HTTP liveness probe on `/` port 80 (`01-nginx-deploy-liveness.yaml`) and 
 
 #### Screenshot 2 — Pod description showing the liveness probe
 
-Add your screenshot here.
+![Screenshot 2 — Pod description showing the liveness probe](screenshots/assignment-06/week-12-assignment-06-screenshot-02-liveness-probe.png)
 
 ---
 
@@ -48,7 +48,7 @@ Change the liveness path to `/does-not-exist`, apply it, and watch `RESTARTS` in
 
 #### Screenshot 3 — Pod RESTARTS increment and the corresponding liveness failure events
 
-Add your screenshot here.
+![Screenshot 3 — Liveness restart and failure events](screenshots/assignment-06/week-12-assignment-06-screenshot-03-liveness-restart.png)
 
 ---
 
@@ -62,7 +62,7 @@ Reapply the good liveness manifest and confirm restart counts stop increasing.
 
 #### Screenshot 4 — Stable Pod state after the fixed manifest is applied
 
-Add your screenshot here.
+![Screenshot 4 — Liveness probe stabilized](screenshots/assignment-06/week-12-assignment-06-screenshot-04-liveness-stabilized.png)
 
 ---
 
@@ -76,7 +76,7 @@ Review recommended probe ranges and retain or delete the Deployment.
 
 #### Screenshot 5 — Final healthy state and any troubleshooting evidence used
 
-Add your screenshot here.
+![Screenshot 5 — Final healthy state](screenshots/assignment-06/week-12-assignment-06-screenshot-05-final-healthy-state.png)
 
 ---
 
@@ -84,7 +84,11 @@ Add your screenshot here.
 
 Write a short note describing what the lab demonstrated.
 
-Write your answer here.
+The lab demonstrated how a Kubernetes liveness probe enables kubelet-driven self-healing for an unhealthy container. The healthy NGINX liveness probe checked HTTP `/` on port 80 and allowed the Pods to remain stable.
+
+The `/does-not-exist` failure intentionally returned HTTP 404 responses. The kubelet detected the sustained liveness failures and restarted the NGINX containers, with the restart count increasing to 4 and corresponding `Unhealthy` and `Killing` events. Restoring the healthy liveness configuration stopped the restart behavior and returned the Deployment to a stable 2/2 healthy state.
+
+The lab also demonstrated the distinction between liveness and readiness: liveness is used to restart an unhealthy container, while readiness controls whether a Pod is considered available for traffic.
 
 ---
 
@@ -97,12 +101,12 @@ Write your answer here.
 
 # Completion Checklist
 
-- [ ] Task 1: Baseline Deployment applied (Screenshot 1)
-- [ ] Task 2: Liveness probe added and verified (Screenshot 2)
-- [ ] Task 3: Liveness restart triggered and observed (Screenshot 3)
-- [ ] Task 4: Probe restored and stabilized (Screenshot 4)
-- [ ] Task 5: Tuning reviewed / cleanup completed (Screenshot 5)
-- [ ] Reflection notes written (Notes)
+- [x] Task 1: Baseline Deployment applied (Screenshot 1)
+- [x] Task 2: Liveness probe added and verified (Screenshot 2)
+- [x] Task 3: Liveness restart triggered and observed (Screenshot 3)
+- [x] Task 4: Probe restored and stabilized (Screenshot 4)
+- [x] Task 5: Tuning reviewed / cleanup completed (Screenshot 5)
+- [x] Reflection notes written (Notes)
 
 ---
 
