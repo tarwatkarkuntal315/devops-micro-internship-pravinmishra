@@ -20,7 +20,7 @@ Create the `~/k8s-labs/replicasets` working directory.
 
 #### Screenshot 1 — Terminal showing the `~/k8s-labs/replicasets` working directory
 
-Add your screenshot here.
+![Screenshot 1 — Lab directory](screenshots/assignment-02/week-12-assignment-02-screenshot-01-lab-directory.png)
 
 ---
 
@@ -34,7 +34,7 @@ Write `nginx-replicaset.yaml` (apiVersion `apps/v1`, kind `ReplicaSet`, 3 replic
 
 #### Screenshot 2 — `nginx-replicaset.yaml` and terminal output showing three running Pods
 
-Add your screenshot here.
+![Screenshot 2 — ReplicaSet with three Pods](screenshots/assignment-02/week-12-assignment-02-screenshot-02-replicaset-three-pods.png)
 
 ---
 
@@ -48,7 +48,7 @@ Delete one Pod managed by `nginx-replicaset` and confirm Kubernetes creates a re
 
 #### Screenshot 3 — Terminal showing the deleted Pod and the newly created replacement, with the desired count remaining three
 
-Add your screenshot here.
+![Screenshot 3 — ReplicaSet auto-healing](screenshots/assignment-02/week-12-assignment-02-screenshot-03-replicaset-auto-healing.png)
 
 ---
 
@@ -62,7 +62,7 @@ Change `replicas` from 3 to 5, reapply the manifest, and confirm five Pods are m
 
 #### Screenshot 4 — Terminal showing five Pods and the `nginx-replicaset` details
 
-Add your screenshot here.
+![Screenshot 4 — ReplicaSet scaled to five Pods](screenshots/assignment-02/week-12-assignment-02-screenshot-04-replicaset-five-pods.png)
 
 ---
 
@@ -75,11 +75,11 @@ Add your screenshot here.
 
 # Completion Checklist
 
-- [ ] Task 1: Lab directory created (Screenshot 1)
-- [ ] Task 2: ReplicaSet created with three Pods (Screenshot 2)
-- [ ] Task 3: Auto-healing observed after deleting a Pod (Screenshot 3)
-- [ ] Task 4: Scaled to five Pods and inspected (Screenshot 4)
-- [ ] Understood why Deployments are preferred for rolling updates and rollbacks
+- [x] Task 1: Lab directory created (Screenshot 1)
+- [x] Task 2: ReplicaSet created with three Pods (Screenshot 2)
+- [x] Task 3: Auto-healing observed after deleting a Pod (Screenshot 3)
+- [x] Task 4: Scaled to five Pods and inspected (Screenshot 4)
+- [x] Understood why Deployments are preferred for rolling updates and rollbacks
 
 ---
 
