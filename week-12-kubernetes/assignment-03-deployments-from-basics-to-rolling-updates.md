@@ -20,7 +20,7 @@ Create the `~/k8s-labs/deployments` working directory.
 
 #### Screenshot 1 — Terminal showing the `~/k8s-labs/deployments` working directory
 
-Add your screenshot here.
+![Screenshot 1 — Deployment lab directory](screenshots/assignment-03/week-12-assignment-03-screenshot-01-lab-directory.png)
 
 ---
 
@@ -34,7 +34,7 @@ Create `nginx-deployment.yaml` with two replicas and image `nginx:1.21.1`, apply
 
 #### Screenshot 2 — Manifest plus `kubectl` output showing the Deployment, ReplicaSet, and two Pods
 
-Add your screenshot here.
+![Screenshot 2 — Basic Deployment](screenshots/assignment-03/week-12-assignment-03-screenshot-02-basic-deployment.png)
 
 ---
 
@@ -48,7 +48,7 @@ Add `strategy.rollingUpdate` with `maxSurge: 1` and `maxUnavailable: 0` to the D
 
 #### Screenshot 3 — Deployment YAML showing the RollingUpdate strategy and successful apply output
 
-Add your screenshot here.
+![Screenshot 3 — RollingUpdate strategy](screenshots/assignment-03/week-12-assignment-03-screenshot-03-rolling-update-strategy.png)
 
 ---
 
@@ -62,7 +62,7 @@ Update the image to `nginx:1.23.1` with `kubectl set image`, watch the rollout, 
 
 #### Screenshot 4 — Rolling-update status, multiple ReplicaSets, and successful rollback/history output
 
-Add your screenshot here.
+![Screenshot 4 — Rolling update and rollback](screenshots/assignment-03/week-12-assignment-03-screenshot-04-rolling-update-rollback.png)
 
 ---
 
@@ -76,7 +76,7 @@ Scale to five replicas, verify, then scale back to two.
 
 #### Screenshot 5 — Terminal showing the scale-up and scale-down results
 
-Add your screenshot here.
+![Screenshot 5 — Deployment scaling](screenshots/assignment-03/week-12-assignment-03-screenshot-05-scaling.png)
 
 ---
 
@@ -84,7 +84,7 @@ Add your screenshot here.
 
 Write a short note describing what the lab demonstrated.
 
-Write your answer here.
+This lab demonstrated how Kubernetes Deployments manage ReplicaSets and Pods through declarative desired state. I created a two-replica NGINX Deployment, configured a RollingUpdate strategy with `maxSurge: 1` and `maxUnavailable: 0`, updated the image from `nginx:1.21.1` to `nginx:1.23.1`, verified the rollout and ReplicaSet revision, and successfully rolled back to the previous image. Finally, I scaled the Deployment from 2 to 5 replicas and back to 2.
 
 ---
 
@@ -97,12 +97,12 @@ Write your answer here.
 
 # Completion Checklist
 
-- [ ] Task 1: Lab directory created (Screenshot 1)
-- [ ] Task 2: Two-replica Deployment applied (Screenshot 2)
-- [ ] Task 3: RollingUpdate strategy configured (Screenshot 3)
-- [ ] Task 4: Image updated and rolled back (Screenshot 4)
-- [ ] Task 5: Scaled up and down (Screenshot 5)
-- [ ] Reflection notes written (Notes)
+- [x] Task 1: Lab directory created (Screenshot 1)
+- [x] Task 2: Two-replica Deployment applied (Screenshot 2)
+- [x] Task 3: RollingUpdate strategy configured (Screenshot 3)
+- [x] Task 4: Image updated and rolled back (Screenshot 4)
+- [x] Task 5: Scaled up and down (Screenshot 5)
+- [x] Reflection notes written (Notes)
 
 ---
 
