@@ -1,0 +1,13 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.tfplan
+tfplan
+tfplan.out
+*.pem
+.env
+.env.*
+.claude/settings.local.json
+# Plan JSON holds sensitive values (DB password) in plain text
+reports/tfplan.json

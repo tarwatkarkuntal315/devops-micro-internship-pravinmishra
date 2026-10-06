@@ -1,0 +1,154 @@
+#!/bin/bash
+# Book Review App - Application tier boot script (templatefile-rendered).
+#
+# IMPORTANT for anyone editing this file: it is passed through Terraform's
+# templatefile() function. A doubled-dollar brace escape renders as a
+# literal single-dollar brace, which is how bash's own parameter-expansion
+# defaults (e.g. NODE_MAJOR below) survive the render untouched. Every
+# other dollar-brace placeholder naming repo_url, db_host, and similar is
+# a REAL Terraform template variable supplied from modules/compute/app.tf,
+# substituted before this script ever runs. Plain dollar-name references
+# with no braces are untouched either way, since templatefile() only
+# interprets braced dollar sequences.
+set -euo pipefail
+exec > >(tee -a /var/log/book-review-setup.log) 2>&1
+
+echo "=== book-review app-tier bootstrap starting at $(date -u +%FT%TZ) ==="
+
+# Stagger the second instance's start so two freshly-booted instances do
+# not both run sequelize sync({ alter: true }) + sample-data seeding
+# against an empty database at the same moment (see
+# backend/src/server.js). This is a pragmatic lab mitigation, not a
+# distributed lock - it shrinks the race window, it does not eliminate it.
+echo "Startup delay: ${delay_seconds}s"
+sleep ${delay_seconds}
+
+dnf -y update
+dnf -y install git jq
+
+echo "--- Installing Node.js ---"
+# AL2023 does not use dnf modularity (unlike AL2); multiple Node majors are
+# published as separate package names instead. Confidence: MEDIUM - this
+# matches AL2023's documented package layout at the time this module was
+# written, but package names can change between AL2023 repo snapshots, so
+# every candidate is attempted and the actual installed version is
+# verified below rather than trusted blindly.
+NODE_INSTALLED=0
+for pkg in nodejs20 nodejs22 nodejs18 nodejs; do
+  if dnf -y install "$pkg"; then
+    echo "Installed Node.js via dnf package: $pkg"
+    NODE_INSTALLED=1
+    break
+  fi
+  echo "dnf package '$pkg' unavailable here, trying next candidate"
+done
+
+if [ "$NODE_INSTALLED" -ne 1 ]; then
+  echo "FATAL: could not install any Node.js dnf package (tried nodejs20, nodejs22, nodejs18, nodejs)"
+fi
+
+if ! command -v node >/dev/null 2>&1; then
+  for alt in /usr/bin/node-20 /usr/bin/node-22 /usr/bin/node-18; do
+    if [ -x "$alt" ]; then
+      alternatives --install /usr/bin/node node "$alt" 20 || true
+      # npm ships with the same version suffix (npm-20); link it too or
+      # `npm install -g pm2` below fails under set -e.
+      npm_alt="/usr/bin/npm-$(basename "$alt" | cut -d- -f2)"
+      [ -x "$npm_alt" ] && { alternatives --install /usr/bin/npm npm "$npm_alt" 20 || true; }
+      break
+    fi
+  done
+fi
+
+NODE_VERSION_RAW=$(node -v 2>/dev/null || echo none)
+NODE_MAJOR=$(echo "$NODE_VERSION_RAW" | sed -nE 's/^v([0-9]+).*/\1/p')
+: "$${NODE_MAJOR:=0}"
+if [ "$NODE_MAJOR" -ge 18 ] 2>/dev/null; then
+  echo "Node.js OK: $NODE_VERSION_RAW"
+else
+  echo "FATAL: Node.js major version check failed (got '$NODE_VERSION_RAW'). The backend requires Node >= 18. The app WILL fail to start."
+fi
+
+npm install -g pm2
+
+echo "--- Cloning application repository ---"
+mkdir -p /opt/book-review-app
+chown ec2-user:ec2-user /opt/book-review-app
+if [ -d /opt/book-review-app/.git ]; then
+  sudo -u ec2-user git -C /opt/book-review-app pull
+else
+  sudo -u ec2-user git clone ${repo_url} /opt/book-review-app
+fi
+
+# The repo commits backend/node_modules and a backend/.env file. The
+# committed node_modules may contain OS-specific native binaries built on
+# a different platform than this instance, and the committed .env must
+# never override the environment this script sets below - remove it and
+# reinstall dependencies regardless.
+cd /opt/book-review-app/backend
+rm -f .env
+sudo -u ec2-user bash -lc "cd /opt/book-review-app/backend && (npm ci || npm install)"
+
+echo "--- Fetching secrets (values are never logged) ---"
+DB_PASS=$(aws secretsmanager get-secret-value \
+  --secret-id "${master_secret_arn}" \
+  --region "${region}" \
+  --query SecretString --output text | jq -r .password)
+
+JWT_SECRET=$(aws ssm get-parameter \
+  --name "${jwt_param_name}" \
+  --with-decryption \
+  --region "${region}" \
+  --query Parameter.Value --output text)
+
+echo "--- Writing PM2 ecosystem file (mode 600, ec2-user-owned) ---"
+# Built with jq (not string interpolation) so a password/secret containing
+# quotes, backslashes, or other special characters is always emitted as
+# valid, safely-escaped JSON.
+ECOSYSTEM_FILE=/opt/book-review-app/backend/ecosystem.config.json
+umask 077
+jq -n \
+  --arg name "book-review-backend" \
+  --arg cwd "/opt/book-review-app/backend" \
+  --arg db_host "${db_host}" \
+  --arg db_port "${db_port}" \
+  --arg db_name "${db_name}" \
+  --arg db_user "${db_user}" \
+  --arg db_pass "$DB_PASS" \
+  --arg port "3001" \
+  --arg jwt_secret "$JWT_SECRET" \
+  --arg allowed_origins "${allowed_origins}" \
+  '{
+    apps: [
+      {
+        name: $name,
+        cwd: $cwd,
+        script: "src/server.js",
+        env: {
+          DB_HOST: $db_host,
+          DB_PORT: $db_port,
+          DB_NAME: $db_name,
+          DB_USER: $db_user,
+          DB_PASS: $db_pass,
+          DB_DIALECT: "mysql",
+          PORT: $port,
+          JWT_SECRET: $jwt_secret,
+          ALLOWED_ORIGINS: $allowed_origins
+        }
+      }
+    ]
+  }' > "$ECOSYSTEM_FILE"
+
+chmod 600 "$ECOSYSTEM_FILE"
+chown ec2-user:ec2-user "$ECOSYSTEM_FILE"
+unset DB_PASS JWT_SECRET
+
+echo "--- Starting backend under PM2 (ec2-user) ---"
+sudo -u ec2-user bash -lc "cd /opt/book-review-app/backend && pm2 start ecosystem.config.json && pm2 save"
+
+echo "--- Enabling PM2 on boot (systemd, ec2-user) ---"
+# Run as root, `pm2 startup` installs the pm2-ec2-user systemd unit itself
+# (it only prints a sudo command when run as a non-root user).
+env PATH="$PATH:/usr/local/bin:/usr/bin" pm2 startup systemd -u ec2-user --hp /home/ec2-user
+
+echo "=== book-review app-tier bootstrap finished at $(date -u +%FT%TZ) ==="
