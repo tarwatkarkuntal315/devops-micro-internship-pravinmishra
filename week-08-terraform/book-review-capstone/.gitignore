@@ -1,0 +1,10 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.tfplan
+tfplan
+*.pem
+.env
+.env.*
+.claude/settings.local.json

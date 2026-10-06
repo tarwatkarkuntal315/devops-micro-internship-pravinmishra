@@ -1,0 +1,42 @@
+# Copy to terraform.tfvars and adjust only if you need non-default values.
+# None of these are secrets. The defaults in variables.tf already match the
+# approved Phase 1 networking design, so terraform.tfvars is optional.
+
+region = "ap-south-1"
+
+azs = ["ap-south-1a", "ap-south-1b"]
+
+vpc_cidr = "10.0.0.0/16"
+
+project = "book-review"
+owner   = "Kuntal Tarwatkar"
+
+# Required, no default - SSH is only allowed from this single IP.
+# Find your current public IP with: curl -s https://checkip.amazonaws.com
+# then append /32. Replace this placeholder before every plan/apply; your
+# IP may change between sessions.
+admin_cidr = "203.0.113.10/32"
+
+subnets = {
+  web_a = { cidr_block = "10.0.1.0/24", availability_zone = "ap-south-1a", tier = "web" }
+  web_b = { cidr_block = "10.0.2.0/24", availability_zone = "ap-south-1b", tier = "web" }
+  app_a = { cidr_block = "10.0.11.0/24", availability_zone = "ap-south-1a", tier = "app" }
+  app_b = { cidr_block = "10.0.12.0/24", availability_zone = "ap-south-1b", tier = "app" }
+  db_a  = { cidr_block = "10.0.21.0/24", availability_zone = "ap-south-1a", tier = "db" }
+  db_b  = { cidr_block = "10.0.22.0/24", availability_zone = "ap-south-1b", tier = "db" }
+}
+
+# Phase 5 (compute). Required, no default - this IS a secret: generate
+# with `openssl rand -hex 32` and never commit the real value. This file
+# is an example only; copy it to terraform.tfvars (git-ignored) before
+# filling in a real secret.
+jwt_secret = "REPLACE_WITH_OPENSSL_RAND_HEX_32_OUTPUT"
+
+# Path to the PUBLIC half of your SSH key pair (never the private key).
+ssh_public_key_path = "~/.ssh/epicbook-key.pub"
+
+# Uncomment to override the Phase 5 compute defaults (t3.small web /
+# t3.micro app, upstream GitHub repo):
+# web_instance_type = "t3.small"
+# app_instance_type = "t3.micro"
+# repo_url          = "https://github.com/pravinmishraaws/book-review-app.git"

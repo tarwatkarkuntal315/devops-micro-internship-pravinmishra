@@ -1,0 +1,199 @@
+#!/bin/bash
+# Book Review App - Web tier boot script (templatefile-rendered).
+#
+# IMPORTANT for anyone editing this file: it is passed through Terraform's
+# templatefile() function. Dollar-brace placeholders naming repo_url,
+# internal_alb_dns_name, or next_public_api_url are REAL Terraform
+# template variables, substituted before this script ever runs. The two
+# heredocs below that write Nginx config use a QUOTED delimiter (<<'TAG'),
+# so bash performs zero expansion inside them at runtime - plain,
+# brace-free shell-style references such as host/remote_addr are left
+# completely alone for Nginx to interpret as its own variables; only the
+# one dollar-brace internal_alb_dns_name placeholder in the second heredoc
+# is touched, and only by Terraform's earlier render pass, never by bash.
+set -euo pipefail
+exec > >(tee -a /var/log/book-review-setup.log) 2>&1
+
+echo "=== book-review web-tier bootstrap starting at $(date -u +%FT%TZ) ==="
+
+echo "--- Swapfile (2 GiB) ---"
+# t3.small has 2 GiB RAM; `npm run build` for Next.js can still exceed
+# that under load, so a swapfile is added as a cheap safety margin instead
+# of sizing straight up to a larger (more expensive) instance type.
+if [ ! -f /swapfile ]; then
+  fallocate -l 2G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=2048
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+  echo '/swapfile none swap sw 0 0' >> /etc/fstab
+else
+  echo "/swapfile already present, skipping"
+fi
+
+dnf -y update
+dnf -y install git nginx jq
+
+echo "--- Installing Node.js ---"
+# See app_user_data.sh.tftpl for the AL2023 package-naming rationale
+# (Confidence: MEDIUM) - the same fallback chain and verification is used
+# on both tiers.
+NODE_INSTALLED=0
+for pkg in nodejs20 nodejs22 nodejs18 nodejs; do
+  if dnf -y install "$pkg"; then
+    echo "Installed Node.js via dnf package: $pkg"
+    NODE_INSTALLED=1
+    break
+  fi
+  echo "dnf package '$pkg' unavailable here, trying next candidate"
+done
+
+if [ "$NODE_INSTALLED" -ne 1 ]; then
+  echo "FATAL: could not install any Node.js dnf package (tried nodejs20, nodejs22, nodejs18, nodejs)"
+fi
+
+if ! command -v node >/dev/null 2>&1; then
+  for alt in /usr/bin/node-20 /usr/bin/node-22 /usr/bin/node-18; do
+    if [ -x "$alt" ]; then
+      alternatives --install /usr/bin/node node "$alt" 20 || true
+      # npm ships with the same version suffix (npm-20); link it too or
+      # `npm install -g pm2` below fails under set -e.
+      npm_alt="/usr/bin/npm-$(basename "$alt" | cut -d- -f2)"
+      [ -x "$npm_alt" ] && { alternatives --install /usr/bin/npm npm "$npm_alt" 20 || true; }
+      break
+    fi
+  done
+fi
+
+NODE_VERSION_RAW=$(node -v 2>/dev/null || echo none)
+NODE_MAJOR=$(echo "$NODE_VERSION_RAW" | sed -nE 's/^v([0-9]+).*/\1/p')
+: "$${NODE_MAJOR:=0}"
+if [ "$NODE_MAJOR" -ge 18 ] 2>/dev/null; then
+  echo "Node.js OK: $NODE_VERSION_RAW"
+else
+  echo "FATAL: Node.js major version check failed (got '$NODE_VERSION_RAW'). Next.js 15 requires Node >= 18.18. The app WILL fail to build/start."
+fi
+
+npm install -g pm2
+
+echo "--- Cloning application repository ---"
+mkdir -p /opt/book-review-app
+chown ec2-user:ec2-user /opt/book-review-app
+if [ -d /opt/book-review-app/.git ]; then
+  sudo -u ec2-user git -C /opt/book-review-app pull
+else
+  sudo -u ec2-user git clone ${repo_url} /opt/book-review-app
+fi
+
+cd /opt/book-review-app/frontend
+sudo -u ec2-user bash -lc "cd /opt/book-review-app/frontend && (npm ci || npm install)"
+
+echo "--- Building frontend (NEXT_PUBLIC_API_URL baked in at build time) ---"
+# frontend/src/services/api.js calls NEXT_PUBLIC_API_URL + "/users/login",
+# "/books", "/reviews" while Express mounts routes at /api/... - the /api
+# suffix baked in below is required, not optional.
+sudo -u ec2-user bash -lc "cd /opt/book-review-app/frontend && NEXT_PUBLIC_API_URL='${next_public_api_url}' npm run build"
+
+echo "--- Starting frontend under PM2 (ec2-user, port 3000) ---"
+sudo -u ec2-user bash -lc "cd /opt/book-review-app/frontend && pm2 start npm --name book-review-frontend -- start"
+sudo -u ec2-user bash -lc "pm2 save"
+
+echo "--- Enabling PM2 on boot (systemd, ec2-user) ---"
+# Run as root, `pm2 startup` installs the pm2-ec2-user systemd unit itself
+# (it only prints a sudo command when run as a non-root user).
+env PATH="$PATH:/usr/local/bin:/usr/bin" pm2 startup systemd -u ec2-user --hp /home/ec2-user
+
+echo "--- Configuring Nginx (:80 -> Next.js :3000, /api/ -> internal ALB) ---"
+# Full nginx.conf is replaced (rather than patched) so there is exactly
+# one server block for :80, defined in conf.d/book-review.conf below - no
+# risk of colliding with a stock "default_server" shipped by the nginx
+# package.
+cat > /etc/nginx/nginx.conf <<'NGINX_CONF'
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                     '$status $body_bytes_sent "$http_referer" '
+                     '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log /var/log/nginx/access.log main;
+
+    sendfile    on;
+    tcp_nopush  on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 4096;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+NGINX_CONF
+
+rm -f /etc/nginx/conf.d/*.conf
+
+cat > /etc/nginx/conf.d/book-review.conf <<'NGINX_SITE_CONF'
+# VPC DNS resolver: required so Nginx re-resolves the internal ALB's DNS
+# name periodically instead of caching its IP(s) forever (ALB node IPs
+# can change over the load balancer's lifetime).
+resolver 169.254.169.253 valid=10s;
+
+server {
+    listen 80 default_server;
+    server_name _;
+
+    set $internal_alb "${internal_alb_dns_name}";
+
+    # Workaround for an upstream app inconsistency: services/api.js expects
+    # NEXT_PUBLIC_API_URL to already end in /api, but app/page.js (home page
+    # book list) appends "/api/books" itself, so the browser requests
+    # /api/api/books (404). Collapse the doubled prefix, then proxy as usual.
+    location /api/api/ {
+        rewrite ^/api(/api/.*)$ $1 break;
+        proxy_pass http://$internal_alb$uri$is_args$args;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /api/ {
+        # proxy_pass with a variable target disables Nginx's normal
+        # prefix-rewriting, so the full incoming URI (including the
+        # "/api/" prefix) is forwarded to the internal ALB unchanged -
+        # required since the backend mounts routes at /api/users,
+        # /api/books, /api/reviews, not at "/".
+        proxy_pass http://$internal_alb;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+NGINX_SITE_CONF
+
+nginx -t
+systemctl enable nginx
+systemctl restart nginx
+
+echo "=== book-review web-tier bootstrap finished at $(date -u +%FT%TZ) ==="

@@ -1,0 +1,213 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Book Review AWS Architecture</title>
+<style>
+  html,body{margin:0;background:#fff}
+  svg{display:block;font-family:"Segoe UI",Arial,sans-serif}
+  .t{font-size:15px;fill:#1f2937}
+  .s{font-size:13px;fill:#374151}
+  .xs{font-size:12px;fill:#4b5563}
+  .w{fill:#fff;font-size:14px;font-weight:600}
+  .ws{fill:#fff;font-size:12.5px}
+  .h{font-size:16px;font-weight:700;fill:#111827}
+  .lbl{font-size:13.5px;font-weight:700}
+  .req{stroke:#d9480f;stroke-width:2.6;fill:none;marker-end:url(#ar)}
+  .out{stroke:#6b7280;stroke-width:2;stroke-dasharray:7 5;fill:none;marker-end:url(#ag)}
+  .rep{stroke:#3b48cc;stroke-width:2;fill:none;marker-end:url(#ab)}
+  .num{fill:#d9480f}
+</style></head><body>
+<svg width="1720" height="1180" viewBox="0 0 1720 1180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9480f"/></marker>
+  <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker>
+  <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b48cc"/></marker>
+</defs>
+
+<!-- Title -->
+<text x="30" y="38" style="font-size:24px;font-weight:700;fill:#111827">Book Review App — AWS Three-Tier Architecture (Terraform)</text>
+<text x="30" y="62" class="s">Kuntal Tarwatkar · DMI Week 08 Capstone (Assignment 05) · Region ap-south-1 (Mumbai)</text>
+
+<!-- External actors -->
+<rect x="500" y="80" width="200" height="50" rx="10" fill="#111827"/>
+<text x="600" y="110" text-anchor="middle" class="w">Users (web browser)</text>
+<rect x="60" y="80" width="250" height="50" rx="10" fill="#fff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="185" y="101" text-anchor="middle" class="s" style="font-weight:600">Admin (student IP /32)</text>
+<text x="185" y="120" text-anchor="middle" class="xs">SSH :22 → Web EC2s only</text>
+
+<!-- AWS Cloud -->
+<rect x="30" y="150" width="1130" height="900" rx="12" fill="#fafafa" stroke="#232f3e" stroke-width="2"/>
+<text x="48" y="174" class="lbl" style="fill:#232f3e">AWS Cloud · ap-south-1</text>
+
+<!-- VPC -->
+<rect x="55" y="200" width="1080" height="830" rx="10" fill="#fff" stroke="#8c4fff" stroke-width="2.2"/>
+<text x="72" y="222" class="lbl" style="fill:#8c4fff">VPC 10.0.0.0/16</text>
+
+<!-- AZ columns -->
+<rect x="85" y="240" width="500" height="775" rx="10" fill="none" stroke="#9ca3af" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="605" y="240" width="500" height="775" rx="10" fill="none" stroke="#9ca3af" stroke-width="1.6" stroke-dasharray="8 6"/>
+<text x="335" y="258" text-anchor="middle" class="xs" style="font-weight:700">Availability Zone ap-south-1a</text>
+<text x="855" y="258" text-anchor="middle" class="xs" style="font-weight:700">Availability Zone ap-south-1b</text>
+
+<!-- ROW 1: public web subnets -->
+<rect x="100" y="268" width="470" height="212" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+<rect x="620" y="268" width="470" height="212" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+<text x="112" y="287" class="lbl" style="fill:#2e7d32">Public subnet · Web A · 10.0.1.0/24</text>
+<text x="632" y="287" class="lbl" style="fill:#2e7d32">Public subnet · Web B · 10.0.2.0/24</text>
+
+<!-- ROW 2: private app subnets -->
+<rect x="100" y="505" width="470" height="235" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.6"/>
+<rect x="620" y="505" width="470" height="235" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.6"/>
+<text x="558" y="731" text-anchor="end" class="lbl" style="fill:#1565c0">Private subnet · App A · 10.0.11.0/24</text>
+<text x="1078" y="731" text-anchor="end" class="lbl" style="fill:#1565c0">Private subnet · App B · 10.0.12.0/24</text>
+
+<!-- ROW 3: private DB subnets -->
+<rect x="100" y="770" width="470" height="235" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.6"/>
+<rect x="620" y="770" width="470" height="235" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.6"/>
+
+
+<text x="112" y="995" class="lbl" style="fill:#6a1b9a">Private subnet · DB A · 10.0.21.0/24 <tspan class="xs" style="font-weight:400">· no internet route</tspan></text>
+<text x="632" y="995" class="lbl" style="fill:#6a1b9a">Private subnet · DB B · 10.0.22.0/24 <tspan class="xs" style="font-weight:400">· no internet route</tspan></text>
+
+<!-- ===== connectors (drawn before boxes) ===== -->
+<!-- request path -->
+<path class="req" d="M600,130 L600,178"/>
+<path class="req" d="M600,222 L600,302"/>
+<path class="req" d="M275,348 L275,385"/>
+<path class="req" d="M795,348 L795,385"/>
+<path class="req" d="M275,462 L275,560"/>
+<path class="req" d="M795,462 L795,560"/>
+<path class="req" d="M275,605 L275,630"/>
+<path class="req" d="M795,605 L795,630"/>
+<path class="req" d="M275,705 L275,815"/>
+<path class="req" d="M760,705 L760,754 L345,754 L345,815"/>
+<!-- outbound via NAT -->
+<path class="out" d="M400,668 L480,668 L480,462"/>
+<path class="out" d="M920,662 L1075,662 L1075,492 L505,492 L505,462"/>
+<path class="out" d="M520,392 L520,200 L548,200"/>
+<!-- admin ssh -->
+<path class="out" d="M310,105 L420,105 L420,190 L548,195"/>
+<!-- DB replication -->
+<path class="rep" d="M400,848 L668,848"/>
+<path class="rep" d="M400,878 L560,878 L560,943 L668,943"/>
+
+<!-- IGW -->
+<rect x="550" y="178" width="100" height="44" rx="8" fill="#8c4fff"/>
+<text x="600" y="205" text-anchor="middle" class="w">Internet GW</text>
+
+<!-- Public ALB -->
+<rect x="125" y="302" width="940" height="46" rx="8" fill="#8c4fff"/>
+<text x="595" y="323" text-anchor="middle" class="w">Public Application Load Balancer (internet-facing) · listener HTTP :80</text>
+<text x="595" y="341" text-anchor="middle" class="ws">spans Web A + Web B · target group: Web EC2s :80 · health check GET /</text>
+
+<!-- Web EC2s -->
+<rect x="140" y="385" width="270" height="77" rx="8" fill="#ed7100"/>
+<text x="275" y="408" text-anchor="middle" class="w">Web EC2 (AZ-a) · public IP</text>
+<text x="275" y="428" text-anchor="middle" class="ws">Nginx :80 → Next.js :3000</text>
+<text x="275" y="447" text-anchor="middle" class="ws">/api/ → internal ALB</text>
+<rect x="660" y="385" width="270" height="77" rx="8" fill="#ed7100"/>
+<text x="795" y="408" text-anchor="middle" class="w">Web EC2 (AZ-b) · public IP</text>
+<text x="795" y="428" text-anchor="middle" class="ws">Nginx :80 → Next.js :3000</text>
+<text x="795" y="447" text-anchor="middle" class="ws">/api/ → internal ALB</text>
+
+<!-- NAT -->
+<rect x="430" y="392" width="128" height="62" rx="8" fill="#8c4fff"/>
+<text x="494" y="418" text-anchor="middle" class="w">NAT Gateway</text>
+<text x="494" y="438" text-anchor="middle" class="ws">+ Elastic IP</text>
+
+<!-- Internal ALB -->
+<rect x="125" y="560" width="940" height="45" rx="8" fill="#8c4fff"/>
+<text x="595" y="580" text-anchor="middle" class="w">Internal Application Load Balancer (private) · listener HTTP :80</text>
+<text x="595" y="597" text-anchor="middle" class="ws">spans App A + App B · target group: App EC2s :3001 · health check GET /</text>
+
+<!-- App EC2s -->
+<rect x="140" y="630" width="260" height="75" rx="8" fill="#ed7100"/>
+<text x="270" y="654" text-anchor="middle" class="w">App EC2 (AZ-a) · no public IP</text>
+<text x="270" y="674" text-anchor="middle" class="ws">Node.js / Express :3001 (PM2)</text>
+<text x="270" y="693" text-anchor="middle" class="ws">backend/src/server.js</text>
+<rect x="660" y="630" width="260" height="75" rx="8" fill="#ed7100"/>
+<text x="790" y="654" text-anchor="middle" class="w">App EC2 (AZ-b) · no public IP</text>
+<text x="790" y="674" text-anchor="middle" class="ws">Node.js / Express :3001 (PM2)</text>
+<text x="790" y="693" text-anchor="middle" class="ws">backend/src/server.js</text>
+
+<!-- RDS -->
+<rect x="140" y="815" width="260" height="80" rx="8" fill="#3b48cc"/>
+<text x="270" y="841" text-anchor="middle" class="w">RDS MySQL · Primary</text>
+<text x="270" y="861" text-anchor="middle" class="ws">:3306 · reads + writes</text>
+<text x="270" y="880" text-anchor="middle" class="ws">publicly_accessible = false</text>
+<rect x="670" y="815" width="260" height="66" rx="8" fill="#3b48cc" fill-opacity="0.85"/>
+<text x="800" y="841" text-anchor="middle" class="w">RDS Standby (Multi-AZ)</text>
+<text x="800" y="861" text-anchor="middle" class="ws">automatic failover, not readable</text>
+<rect x="670" y="908" width="260" height="66" rx="8" fill="#3b48cc"/>
+<text x="800" y="934" text-anchor="middle" class="w">RDS Read Replica</text>
+<text x="800" y="954" text-anchor="middle" class="ws">read-only endpoint :3306</text>
+<text x="534" y="840" text-anchor="middle" class="xs" style="fill:#3b48cc;font-weight:600">synchronous</text>
+<text x="590" y="935" text-anchor="middle" class="xs" style="fill:#3b48cc;font-weight:600">async</text>
+
+<!-- step numbers -->
+<g style="font-size:13px;font-weight:700">
+<circle cx="620" cy="150" r="11" class="num"/><text x="620" y="155" text-anchor="middle" fill="#fff">1</text>
+<circle cx="620" cy="265" r="11" class="num"/><text x="620" y="270" text-anchor="middle" fill="#fff">2</text>
+<circle cx="295" cy="368" r="11" class="num"/><text x="295" y="373" text-anchor="middle" fill="#fff">3</text>
+<circle cx="295" cy="530" r="11" class="num"/><text x="295" y="535" text-anchor="middle" fill="#fff">4</text>
+<circle cx="295" cy="617" r="11" class="num"/><text x="295" y="622" text-anchor="middle" fill="#fff">5</text>
+<circle cx="295" cy="790" r="11" class="num"/><text x="295" y="795" text-anchor="middle" fill="#fff">6</text>
+</g>
+<text x="928" y="655" class="xs" style="fill:#6b7280">egress → NAT GW</text><text x="410" y="660" class="xs" style="fill:#6b7280">egress</text>
+
+<!-- Traffic flow strip -->
+<rect x="30" y="1070" width="1660" height="92" rx="10" fill="#fff7ed" stroke="#d9480f" stroke-width="1.5"/>
+<text x="50" y="1096" class="lbl" style="fill:#d9480f">Main traffic flow</text>
+<text x="50" y="1121" class="t">① Browser → IGW → ② Public ALB :80 → ③ Web EC2 Nginx :80 ( "/" → Next.js :3000 ) → ④ "/api/" → Internal ALB :80 → ⑤ App EC2 Express :3001 → ⑥ RDS MySQL Primary :3306</text>
+<text x="50" y="1146" class="s">Frontend is built with NEXT_PUBLIC_API_URL = http://&lt;public ALB DNS&gt;. The browser never talks to the internal ALB directly; Nginx on the Web tier proxies /api/ to it.</text>
+
+<!-- ===== Right panel ===== -->
+<rect x="1180" y="80" width="510" height="230" rx="10" fill="#fff" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="1198" y="106" class="h">Route tables</text>
+<text x="1198" y="134" class="s" style="font-weight:700;fill:#2e7d32">Public RT (Web A, Web B)</text>
+<text x="1210" y="154" class="s">10.0.0.0/16 → local · 0.0.0.0/0 → Internet GW</text>
+<text x="1198" y="184" class="s" style="font-weight:700;fill:#1565c0">Private App RT (App A, App B)</text>
+<text x="1210" y="204" class="s">10.0.0.0/16 → local · 0.0.0.0/0 → NAT GW (AZ-a)</text>
+<text x="1198" y="234" class="s" style="font-weight:700;fill:#6a1b9a">Private DB RT (DB A, DB B)</text>
+<text x="1210" y="254" class="s">10.0.0.0/16 → local only (no internet route)</text>
+<text x="1198" y="290" class="xs">Single NAT Gateway: deliberate cost choice, single point of</text>
+<text x="1198" y="305" class="xs">failure for App-tier egress if ap-south-1a fails.</text>
+
+<rect x="1180" y="325" width="510" height="335" rx="10" fill="#fff" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="1198" y="351" class="h">Security groups (chained by SG reference)</text>
+<g class="s">
+<text x="1198" y="381" style="font-weight:700">public-alb-sg</text>
+<text x="1210" y="400">in: TCP 80 from 0.0.0.0/0 (the only internet-open rule)</text>
+<text x="1198" y="428" style="font-weight:700">web-sg</text>
+<text x="1210" y="447">in: TCP 80 from public-alb-sg</text>
+<text x="1210" y="465">in: TCP 22 from admin IP /32</text>
+<text x="1198" y="493" style="font-weight:700">internal-alb-sg</text>
+<text x="1210" y="512">in: TCP 80 from web-sg</text>
+<text x="1198" y="540" style="font-weight:700">app-sg</text>
+<text x="1210" y="559">in: TCP 3001 from internal-alb-sg</text>
+<text x="1210" y="577">in: TCP 22 from web-sg (bastion hop)</text>
+<text x="1198" y="605" style="font-weight:700">db-sg</text>
+<text x="1210" y="624">in: TCP 3306 from app-sg only</text>
+<text x="1198" y="648" class="xs">3001 and 3306 are never reachable from the internet.</text>
+</g>
+
+<rect x="1180" y="675" width="510" height="190" rx="10" fill="#fff" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="1198" y="701" class="h">Legend</text>
+<rect x="1198" y="716" width="22" height="14" fill="#e8f5e9" stroke="#2e7d32"/><text x="1228" y="728" class="s">Public subnet (Web tier)</text>
+<rect x="1440" y="716" width="22" height="14" fill="#e3f2fd" stroke="#1565c0"/><text x="1470" y="728" class="s">Private subnet (App tier)</text>
+<rect x="1198" y="742" width="22" height="14" fill="#f3e5f5" stroke="#6a1b9a"/><text x="1228" y="754" class="s">Private subnet (DB tier)</text>
+<rect x="1440" y="742" width="22" height="14" fill="none" stroke="#9ca3af" stroke-dasharray="4 3"/><text x="1470" y="754" class="s">Availability Zone</text>
+<line x1="1198" y1="782" x2="1240" y2="782" class="req"/><text x="1250" y="787" class="s">User request path (numbered)</text>
+<line x1="1198" y1="808" x2="1240" y2="808" class="out"/><text x="1250" y="813" class="s">Outbound egress / admin SSH</text>
+<line x1="1198" y1="834" x2="1240" y2="834" class="rep"/><text x="1250" y="839" class="s">RDS replication (sync standby, async replica)</text>
+
+<rect x="1180" y="880" width="510" height="170" rx="10" fill="#fff" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="1198" y="906" class="h">Security & operations notes</text>
+<g class="s">
+<text x="1198" y="932">• DB_PASS and JWT_SECRET: sensitive Terraform variables at</text>
+<text x="1210" y="950">deploy time, never in code, user data in git, or outputs.</text>
+<text x="1198" y="974">• App EC2s reached via Web EC2 (bastion hop) or SSM only.</text>
+<text x="1198" y="998">• Multi-AZ = availability (failover). Read replica = read</text>
+<text x="1210" y="1016">scaling; it is a separate endpoint and does not fail over automatically.</text>
+<text x="1198" y="1040">• Terraform modules: network · security · alb · database · compute</text>
+</g>
+</svg>
+</body></html>
