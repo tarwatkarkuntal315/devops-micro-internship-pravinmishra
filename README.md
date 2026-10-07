@@ -92,7 +92,7 @@ This is not a course. It is an internship-style program — real deployments, re
 <!-- [![Week 07 – Azure](./badges/week-07.svg)](./week-07-azure-cloud/) -->
 
 <!-- Week 08 → Terraform -->
-<!-- [![Week 08 – Terraform](./badges/week-08.svg)](./week-08-terraform/) -->
+[![Week 08 – Terraform](./badges/week-08.svg)](./week-08-terraform/) 
 
 <!-- Week 09 → Ansible -->
 <!-- [![Week 09 – Ansible](./badges/week-09.svg)](./week-09-ansible/) -->
@@ -138,7 +138,7 @@ This is not a course. It is an internship-style program — real deployments, re
 | 05 | DevOps Lifecycle & Agile | ⬜ Not Started | ⏳ Pending | — | — |
 | 06 | AWS Cloud | ⬜ Not Started | ⏳ Pending | — | — | 
 | 07 | Azure Cloud | ⬜ Not Started | ⏳ Pending | — | — |
-| 08 | Terraform | ⬜ Not Started | ⏳ Pending | — | — |
+| 08 | Terraform | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_dmibypravinmishra-terraform-aws-ugcPost-7513582229974073344-S0a3) | [Blog](https://medium.com/@kuntaltarwatkar/from-one-vm-to-a-self-checking-three-tier-stack-my-week-of-terraform-6b2e61cfbc5c?sharedUserId=kuntaltarwatkar) |
 | 09 | Ansible | ⬜ Not Started | ⏳ Pending | — | — |
 | 10 | Azure DevOps (CI/CD) | ⬜ Not Started | ⏳ Pending | — | — |
 | 11 | Docker | ⬜ Not Started | ⏳ Pending | — | — |
