@@ -1,0 +1,168 @@
+# Multi-stage CI/CD for my-react-app: Build -> Test -> Publish -> Deploy to Nginx on AWS EC2.
+# Author: Kuntal Tarwatkar - DMI Week 10 Assignment 03
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: SelfHostedPool
+
+variables:
+  nodeVersion: '22.x'
+  sshServiceConnection: ubuntu-nginx-ssh
+  deploymentPath: /var/www/html
+  buildArtifact: react-build
+  releaseArtifact: react-app-release
+
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: BuildApp
+        displayName: Install dependencies and build
+        steps:
+          - checkout: self
+            clean: true
+
+          - task: UseNode@1
+            displayName: Install Node.js $(nodeVersion)
+            inputs:
+              version: $(nodeVersion)
+
+          - script: npm ci
+            displayName: npm ci (from package-lock.json)
+
+          - script: npm run build
+            displayName: npm run build (production)
+
+          - script: |
+              set -e
+              test -f build/index.html
+              echo "build/index.html created for commit $(Build.SourceVersion) by Kuntal Tarwatkar"
+            displayName: Verify build output
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish intermediate build artifact
+            inputs:
+              targetPath: build
+              artifact: $(buildArtifact)
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Build
+    jobs:
+      - job: UnitTests
+        displayName: Run unit tests (CI mode)
+        steps:
+          - checkout: self
+            clean: true
+
+          - task: UseNode@1
+            displayName: Install Node.js $(nodeVersion)
+            inputs:
+              version: $(nodeVersion)
+
+          - script: npm ci
+            displayName: npm ci (from package-lock.json)
+
+          # CI=true + --watchAll=false: Jest runs once, never waits for input,
+          # and returns a non-zero exit code if any test fails.
+          - script: npm test -- --watchAll=false
+            displayName: npm test (non-interactive)
+            env:
+              CI: 'true'
+
+  - stage: Publish
+    displayName: Publish
+    dependsOn: Test
+    jobs:
+      - job: PromoteRelease
+        displayName: Verify and promote the release artifact
+        steps:
+          - checkout: none
+
+          - task: DownloadPipelineArtifact@2
+            displayName: Download intermediate build artifact
+            inputs:
+              buildType: current
+              artifactName: $(buildArtifact)
+              targetPath: $(Pipeline.Workspace)/$(buildArtifact)
+
+          - script: |
+              set -e
+              cd "$(Pipeline.Workspace)/$(buildArtifact)"
+              echo "Artifact contents:"
+              find . -maxdepth 3 -type f | sort
+              test -f index.html
+              ls static/js/*.js > /dev/null
+              ls static/css/*.css > /dev/null
+              test ! -e package.json && test ! -d src && test ! -d node_modules
+              echo "index.html and static JS/CSS assets present; no source files or node_modules"
+            displayName: Verify artifact contents
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish deployment artifact
+            inputs:
+              targetPath: $(Pipeline.Workspace)/$(buildArtifact)
+              artifact: $(releaseArtifact)
+
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Publish
+    jobs:
+      - job: DeployToNginx
+        displayName: Deploy to Nginx on EC2
+        steps:
+          - checkout: none
+
+          - task: DownloadPipelineArtifact@2
+            displayName: Download deployment artifact
+            inputs:
+              buildType: current
+              artifactName: $(releaseArtifact)
+              targetPath: $(Pipeline.Workspace)/$(releaseArtifact)
+
+          # Copies the artifact's CONTENTS (not the folder) so index.html lands
+          # directly in /var/www/html; cleanTargetFolder removes the previous release.
+          - task: CopyFilesOverSSH@0
+            displayName: Copy release to /var/www/html over SSH
+            inputs:
+              sshEndpoint: $(sshServiceConnection)
+              sourceFolder: $(Pipeline.Workspace)/$(releaseArtifact)
+              contents: '**'
+              targetFolder: $(deploymentPath)
+              cleanTargetFolder: true
+              overwrite: true
+              failOnEmptySource: true
+              readyTimeout: '20000'
+
+          - task: SSH@0
+            displayName: Verify deployment on the VM
+            inputs:
+              sshEndpoint: $(sshServiceConnection)
+              runOptions: inline
+              inline: |
+                set -euo pipefail
+                # The copy keeps the agent's file modes; make the release read-only for
+                # everyone except the owner (files 644, directories 755). No sudo needed.
+                find $(deploymentPath) -mindepth 1 -type d -exec chmod 755 {} +
+                find $(deploymentPath) -mindepth 1 -type f -exec chmod 644 {} +
+                echo "Contents of $(deploymentPath):"
+                ls -la $(deploymentPath)
+                ls -la $(deploymentPath)/static
+                test -f $(deploymentPath)/index.html
+                test ! -e $(deploymentPath)/package.json
+                test ! -d $(deploymentPath)/src
+                test ! -d $(deploymentPath)/node_modules
+                test -z "$(find $(deploymentPath) -perm -o+w)"
+                echo "index.html present; no src/, package.json or node_modules/; nothing world-writable"
+                echo "Nginx status: $(systemctl is-active nginx)"
+                ROOT=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/)
+                ROUTE=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/some/react/route)
+                echo "HTTP / -> $ROOT, SPA route -> $ROUTE"
+                test "$ROOT" = "200" && test "$ROUTE" = "200"
+                echo "Deployment verified for Kuntal Tarwatkar"
+              failOnStdErr: false
+              readyTimeout: '20000'

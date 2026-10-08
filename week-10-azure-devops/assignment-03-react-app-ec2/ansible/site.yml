@@ -1,0 +1,179 @@
+---
+# Configures the Terraform-provisioned EC2 instance as the Nginx target for the
+# multi-stage React pipeline (Week 10 Assignment 03 — Kuntal Tarwatkar).
+- name: Prepare Nginx for the React SPA and a password-based deployment user
+  hosts: web
+  become: true
+
+  vars:
+    deploy_user: deployer
+    deploy_path: /var/www/html
+    # Supplied at runtime from a file outside the repository (see run-ansible.ps1).
+    deploy_password: "{{ lookup('ansible.builtin.env', 'DEPLOY_PASSWORD') }}"
+
+  pre_tasks:
+    - name: Fail early if the deployment password was not supplied
+      ansible.builtin.assert:
+        that: deploy_password | length >= 16
+        fail_msg: "Set DEPLOY_PASSWORD (16+ characters) before running the playbook."
+        quiet: true
+      no_log: true
+
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Create the deployment user with a hashed password
+      ansible.builtin.user:
+        name: "{{ deploy_user }}"
+        shell: /bin/bash
+        groups: www-data
+        append: true
+        create_home: true
+        password: "{{ deploy_password | password_hash('sha512', 'dmia03salt') }}"
+      no_log: true
+
+    # Ubuntu cloud images disable password logins globally. Enable them for the
+    # deployment user only; every other account stays key-only.
+    - name: Allow password SSH authentication for the deployment user only
+      ansible.builtin.copy:
+        dest: /etc/ssh/sshd_config.d/99-deployer-password-auth.conf
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          # Managed by Ansible — DMI Week 10 Assignment 03
+          Match User {{ deploy_user }}
+              PasswordAuthentication yes
+        validate: /usr/sbin/sshd -t -f %s
+      notify: Restart SSH
+
+    - name: Validate the complete SSH daemon configuration before any restart
+      ansible.builtin.command: /usr/sbin/sshd -t
+      changed_when: false
+
+    # deployer owns the web root so CopyFilesOverSSH can clean and replace releases;
+    # 0755 keeps it readable by Nginx (www-data). No 777 permissions.
+    - name: Give the deployment user ownership of the Nginx web root
+      ansible.builtin.file:
+        path: "{{ deploy_path }}"
+        state: directory
+        owner: "{{ deploy_user }}"
+        group: www-data
+        mode: "0755"
+
+    - name: Remove the default Nginx welcome page
+      ansible.builtin.file:
+        path: "{{ deploy_path }}/index.nginx-debian.html"
+        state: absent
+
+    - name: Add a placeholder page until the first pipeline deployment
+      ansible.builtin.copy:
+        dest: "{{ deploy_path }}/index.html"
+        owner: "{{ deploy_user }}"
+        group: www-data
+        mode: "0644"
+        force: false
+        content: |
+          <!doctype html>
+          <html><body><h1>Waiting for the first Azure DevOps deployment</h1></body></html>
+
+    - name: Configure the Nginx site for React SPA routing
+      ansible.builtin.copy:
+        dest: /etc/nginx/sites-available/react-app
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          # Managed by Ansible — DMI Week 10 Assignment 03
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+              server_name _;
+
+              root {{ deploy_path }};
+              index index.html;
+
+              # Unknown routes fall back to index.html so React Router can handle them.
+              location / {
+                  try_files $uri $uri/ /index.html;
+              }
+
+              # Fingerprinted build assets can be cached for a long time.
+              location /static/ {
+                  try_files $uri =404;
+                  expires 30d;
+                  add_header Cache-Control "public, immutable";
+              }
+
+              # Always revalidate the entry page so new releases appear immediately.
+              location = /index.html {
+                  add_header Cache-Control "no-cache";
+              }
+          }
+      notify: Reload Nginx
+
+    - name: Enable the React site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/react-app
+        dest: /etc/nginx/sites-enabled/react-app
+        state: link
+      notify: Reload Nginx
+
+    - name: Disable the default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Reload Nginx
+
+    - name: Validate the Nginx configuration
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: Enable and start Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Apply pending handler changes before verification
+      ansible.builtin.meta: flush_handlers
+
+    - name: Check that Nginx serves the web root locally
+      ansible.builtin.uri:
+        url: http://localhost
+        status_code: 200
+      register: local_root
+
+    - name: Check that an unknown SPA route falls back to index.html
+      ansible.builtin.uri:
+        url: http://localhost/some/client/route
+        status_code: 200
+      register: spa_route
+
+    - name: Show the effective SSH password setting for the deployment user
+      ansible.builtin.command: /usr/sbin/sshd -T -C user={{ deploy_user }},host=localhost,addr=127.0.0.1
+      register: sshd_effective
+      changed_when: false
+
+    - name: Summarise the target state
+      ansible.builtin.debug:
+        msg:
+          - "Nginx / returned HTTP {{ local_root.status }}; /some/client/route returned HTTP {{ spa_route.status }} (SPA fallback)"
+          - "{{ deploy_path }} is owned by {{ deploy_user }}:www-data with mode 0755"
+          - "{{ sshd_effective.stdout_lines | select('match', '^passwordauthentication') | first }} (for {{ deploy_user }} only)"
+
+  handlers:
+    - name: Restart SSH
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+
+    - name: Reload Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
