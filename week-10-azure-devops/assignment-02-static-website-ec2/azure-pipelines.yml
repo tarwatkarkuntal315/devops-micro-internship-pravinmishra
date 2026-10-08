@@ -1,0 +1,63 @@
+# CI/CD: deploy the Azure Static Website to the Terraform/Ansible-managed AWS EC2 instance.
+# Author: Kuntal Tarwatkar — DMI Week 10 Assignment 02
+
+trigger:
+  branches:
+    include:
+      - '*'
+
+pool:
+  name: SelfHostedPool
+
+variables:
+  sshServiceConnection: azure-static-website-ssh
+  deploymentPath: /var/www/html
+
+steps:
+  - checkout: self
+    clean: true
+    displayName: Checkout Azure Static Website (clean)
+
+  - bash: |
+      echo "Deployed by: Kuntal Tarwatkar"
+      echo "Triggering branch: $(Build.SourceBranchName)"
+      echo "Commit: $(Build.SourceVersion)"
+      echo "Agent name: $(Agent.Name)"
+      echo "Files prepared for deployment:"
+      find . -path ./.git -prune -o -type f ! -name azure-pipelines.yml ! -name README.md -print
+    workingDirectory: $(Build.SourcesDirectory)
+    displayName: Show pipeline information
+
+  - task: CopyFilesOverSSH@0
+    displayName: Copy website files to EC2 over SSH
+    inputs:
+      sshEndpoint: $(sshServiceConnection)
+      sourceFolder: $(Build.SourcesDirectory)
+      contents: |
+        **
+        !.git/**
+        !azure-pipelines.yml
+        !README.md
+      targetFolder: $(deploymentPath)
+      cleanTargetFolder: true
+      overwrite: true
+      failOnEmptySource: true
+      readyTimeout: '20000'
+
+  - task: SSH@0
+    displayName: Verify deployment on EC2
+    inputs:
+      sshEndpoint: $(sshServiceConnection)
+      runOptions: inline
+      inline: |
+        set -euo pipefail
+        echo "Files in $(deploymentPath):"
+        ls -la $(deploymentPath)
+        test -f $(deploymentPath)/index.html
+        echo "index.html exists"
+        HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://localhost)
+        echo "Local Nginx returned HTTP $HTTP_CODE"
+        test "$HTTP_CODE" = "200"
+        echo "Deployment checks passed for Kuntal Tarwatkar"
+      failOnStdErr: false
+      readyTimeout: '20000'

@@ -1,0 +1,16 @@
+# Terraform state, plugins and real variable values stay local
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfplan
+terraform/terraform.tfvars
+terraform/crash.log
+
+# Generated inventory contains the live IP; the example is committed instead
+ansible/inventory.ini
+
+# Never commit keys
+*.pem
+*_rsa
+*_ed25519
+dmi-ec2-*

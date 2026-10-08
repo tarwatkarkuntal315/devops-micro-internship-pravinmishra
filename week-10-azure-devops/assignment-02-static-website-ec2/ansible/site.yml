@@ -1,0 +1,79 @@
+---
+# Configures the Terraform-provisioned EC2 instance as the deployment target
+# for the Azure DevOps pipeline (Week 10 Assignment 02 — Kuntal Tarwatkar).
+- name: Prepare Nginx web server and deployment user
+  hosts: web
+  become: true
+
+  vars:
+    deploy_user: deployer
+    deploy_path: /var/www/html
+    deploy_public_key_file: ~/.ssh/dmi-ec2-deploy.pub
+    website_source_url: https://raw.githubusercontent.com/pravinmishraaws/Azure-Static-Website/main/index.html
+
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Enable and start Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    # Key-only login: no password is created and PasswordAuthentication is left untouched.
+    - name: Create the deployment user used by the Azure DevOps SSH service connection
+      ansible.builtin.user:
+        name: "{{ deploy_user }}"
+        shell: /bin/bash
+        groups: www-data
+        append: true
+        create_home: true
+
+    - name: Authorize the deployment public key for the deployment user
+      ansible.posix.authorized_key:
+        user: "{{ deploy_user }}"
+        key: "{{ lookup('ansible.builtin.file', deploy_public_key_file) }}"
+        exclusive: true
+
+    # deployer owns the document root so CopyFilesOverSSH can clean and write it;
+    # 0755 lets Nginx (www-data) read and traverse it. No 777 permissions.
+    - name: Give the deployment user ownership of the Nginx document root
+      ansible.builtin.file:
+        path: "{{ deploy_path }}"
+        state: directory
+        owner: "{{ deploy_user }}"
+        group: www-data
+        mode: "0755"
+
+    - name: Remove the default Nginx welcome page
+      ansible.builtin.file:
+        path: "{{ deploy_path }}/index.nginx-debian.html"
+        state: absent
+
+    - name: Publish the initial Azure Static Website
+      ansible.builtin.get_url:
+        url: "{{ website_source_url }}"
+        dest: "{{ deploy_path }}/index.html"
+        owner: "{{ deploy_user }}"
+        group: www-data
+        mode: "0644"
+        force: false
+
+    - name: Validate the Nginx configuration
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: Check that Nginx serves the website locally
+      ansible.builtin.uri:
+        url: http://localhost
+        status_code: 200
+      register: local_http
+
+    - name: Show the verification result
+      ansible.builtin.debug:
+        msg: "Nginx returned HTTP {{ local_http.status }}; {{ deploy_path }} is owned by {{ deploy_user }} and ready for pipeline deployments."
