@@ -140,7 +140,7 @@ This is not a course. It is an internship-style program — real deployments, re
 | 07 | Azure Cloud | ⬜ Not Started | ⏳ Pending | — | — |
 | 08 | Terraform | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/posts/kuntal-tarwatkar-413653102_dmibypravinmishra-terraform-aws-ugcPost-7513582229974073344-S0a3) | [Blog](https://medium.com/@kuntaltarwatkar/from-one-vm-to-a-self-checking-three-tier-stack-my-week-of-terraform-6b2e61cfbc5c?sharedUserId=kuntaltarwatkar) |
 | 09 | Ansible | ⬜ Not Started | ⏳ Pending | — | — |
-| 10 | Azure DevOps (CI/CD) | ⬜ Not Started | ⏳ Pending | — | — |
+| 10 | Azure DevOps (CI/CD) | ✅ Completed | ✅ Solved | [LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7514245663237427202/) | [Blog](https://medium.com/@kuntaltarwatkar/week-10-ci-cd-with-azure-devops-from-a-self-hosted-agent-to-ai-assisted-incident-triage-356b40b4ae43?sharedUserId=kuntaltarwatkar) |
 | 11 | Docker | ⬜ Not Started | ⏳ Pending | — | — |
 | 12 | Kubernetes | ⬜ Not Started | ⏳ Pending | — | — |
 | 13 | Final Project | ⬜ Not Started | ⏳ Pending | — | — |
