@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash pipeline-triage.sh)",
+      "Read(./reports/**)",
+      "Read(./CLAUDE.md)"
+    ],
+    "deny": [
+      "Edit",
+      "Write",
+      "NotebookEdit",
+      "Bash(az pipelines run:*)",
+      "Bash(az pipelines runs cancel:*)",
+      "Bash(az pipelines build queue:*)",
+      "Bash(az pipelines build cancel:*)",
+      "Bash(az pipelines update:*)",
+      "Bash(az pipelines delete:*)",
+      "Bash(az pipelines create:*)",
+      "Bash(az pipelines variable:*)",
+      "Bash(az pipelines variable-group:*)",
+      "Bash(az devops service-endpoint:*)",
+      "Bash(az devops invoke:*)",
+      "Bash(az rest:*)",
+      "Bash(az account get-access-token:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(terraform:*)",
+      "Bash(ansible:*)",
+      "Bash(ansible-playbook:*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(git reset:*)",
+      "Bash(git checkout:*)",
+      "Bash(rm:*)",
+      "Bash(bash -x:*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.azure/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.tfvars)",
+      "Read(**/.env)"
+    ]
+  }
+}

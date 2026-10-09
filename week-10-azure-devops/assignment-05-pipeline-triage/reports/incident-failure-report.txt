@@ -1,0 +1,43 @@
+========================================
+CI/CD Pipeline Failure Triage Report
+========================================
+Full Name: Kuntal Tarwatkar
+Timestamp: 2026-10-09T08:10:24Z
+Provider: Azure DevOps
+Organization: https://dev.azure.com/tarwatkark
+Project: self-hosted-agent-lab
+
+Category matches are heuristic evidence; counts represent findings.
+----------------------------------------
+Infrastructure Pipeline (Pipeline ID: 5)
+----------------------------------------
+Run ID: 8
+Branch: refs/heads/main
+Status: completed
+Result: succeeded
+Completion Time: 2026-10-09T06:49:02.382179+00:00
+[PASS] Infrastructure Pipeline — Latest completed run succeeded
+
+----------------------------------------
+Application Pipeline (Pipeline ID: 4)
+----------------------------------------
+Run ID: 11
+Branch: refs/heads/drill/pipeline-failure
+Status: completed
+Result: failed
+Completion Time: 2026-10-09T08:06:56.469451+00:00
+Retrieving step console logs for build 11 ...
+[FAIL] Application Pipeline — Dependency Installation Failure
+    Evidence: 2026-10-09T08:06:52.0823365Z ERROR! Failed to resolve the requested dependencies map. Could not satisfy the following requirements:
+
+
+Summary:
+PASS: 1
+WARN: 0
+FAIL: 1
+ERROR: 0
+Overall Status: FAIL
+Script Exit Code: 2
+Report File: /d/devops-micro-internship-pravinmishra/week-10-azure-devops/assignment-05-pipeline-triage/reports/pipeline-health-report.txt
+Infrastructure Log: /d/devops-micro-internship-pravinmishra/week-10-azure-devops/assignment-05-pipeline-triage/reports/infra-last-run.log
+Application Log: /d/devops-micro-internship-pravinmishra/week-10-azure-devops/assignment-05-pipeline-triage/reports/app-last-run.log
